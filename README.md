@@ -1,7 +1,7 @@
 # What is VueTicket?
 The VueTicket is an Ticketing Application for small companies which are into customer support.
 
-<img src="https://github.com/saineshwar/VueTicket/blob/main/images/Vueticketbanner.jpg" alt="Banner" title="Banner" style="max-width:100%;">
+<img src="https://github.com/saineshwar/VueTicket/blob/main/images/My project.png" alt="Banner" title="Banner" style="max-width:100%;">
 
 ## Technologies Used
 •	ASP.NET Core 5.0
