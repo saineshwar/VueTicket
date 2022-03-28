@@ -1,0 +1,179 @@
+﻿@model TicketCore.ViewModels.Masters.HolidayViewModel
+@{
+    ViewBag.PageName = "Holiday";
+}
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Add</h3>
+        </div>
+        <form autocomplete="off" asp-controller="HolidayList" asp-antiforgery="true" asp-action="Add" method="post">
+
+            <div class="card-body register-card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="mandatory"  asp-for="HolidayName"></label>
+                        <input asp-for="HolidayName" placeholder="Enter Holiday" class="form-control" />
+                        <span class="text-danger" asp-validation-for="HolidayName"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="mandatory"  asp-for="HolidayDate"></label>
+                        <input asp-for="HolidayDate" placeholder="Enter Holiday Date" class="form-control" />
+                        <span class="text-danger" asp-validation-for="HolidayDate"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" id="btnsubmit" class="btn btn-success">Save</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Hoilday List</h3>
+        </div>
+        <div class="card-body register-card-body">
+            <table id="CommonDataTable" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>HolidayId</th>
+                        <th>HolidayName</th>
+                        <th>HolidayDate</th>
+                        <th>CreatedDate</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Views/Shared/_DatatablesCss.cshtml")
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#HolidayDate").datepicker
+            ({
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                numberOfMonths: 1,
+                yearRange: new Date().getFullYear() + ':' + new Date().getFullYear(),
+                onSelect: function (date) {
+                }
+            });
+    });
+</script>
+<script src="~/plugins/moment/moment.min.js"></script>
+
+@await Html.PartialAsync("~/Views/Shared/_DatatablesScripts.cshtml")
+@Html.Hidden("item-to-delete", "", new { @id = "item-to-delete" })
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#CommonDataTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                "ajax": {
+                    "url": "/Administration/HolidayList/GridAllHolidays",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [1],
+                        "orderable": true,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [2],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [3],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [4],
+                        "orderable": false,
+                        "searchable": false
+                    }
+                ],
+                "columns": [
+                    { "data": "HolidayId", "name": "HolidayId", "autoWidth": true },
+                    { "data": "HolidayName", "name": "HolidayName", "autoWidth": true },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return moment(full.HolidayDate).format("DD/MM/YYYY");
+                        }
+                    },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return moment(full.CreatedDate).format("DD/MM/YYYY");
+                        }
+                    },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return ' <button type="button" class="btn btn-danger" onclick="Delete(' + full.HolidayId + ');"> Delete </button>';
+                        }
+                    }
+                ]
+            });
+
+
+
+        });
+
+        function Delete(TempholidayId) {
+            $.confirm({
+                title: 'Delete!',
+                content: 'Do you want to Delete Holiday!',
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            url: "/Administration/HolidayList/Delete",
+                            type: "POST",
+                            data: { HolidayId: TempholidayId },
+                            success: function (data, textStatus, xhr) {
+                                if (data.Result == "success") {
+                                    location.reload();
+                                }
+                                if (data.Result == "failed") {
+                                    $.alert('Something Went Wrong');
+                                }
+                            },
+                            error: function (xhr, status, err) {
+                                if (xhr.status == 401) {
+                                    alert('Error');
+                                    window.location.href = "/Portal/Logout";
+                                }
+                                if (xhr.status == 500) {
+                                    alert('Error');
+                                    window.location.href = "/Portal/Logout";
+                                }
+                            }
+                        });
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                }
+            });
+        }
+
+
+    </script>
+
+
+}

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TicketCore.Common\TicketCore.Common.csproj" />
+    <ProjectReference Include="..\TicketCore.Data\TicketCore.Data.csproj" />
+    <ProjectReference Include="..\TicketCore.Models\TicketCore.Models.csproj" />
+    <ProjectReference Include="..\TicketCore.ViewModels\TicketCore.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

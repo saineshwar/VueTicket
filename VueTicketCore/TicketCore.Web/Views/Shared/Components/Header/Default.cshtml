@@ -1,0 +1,181 @@
+﻿@using Microsoft.AspNetCore.Http
+@using TicketCore.Data.Usermaster.Queries
+@using TicketCore.Web.Extensions
+@using TicketCore.Web.Helpers
+@using TicketCore.Web.Resources
+@using TicketCore.Web.Views.Shared.Components.Notification
+@inject ICheckInStatusQueries _iCheckInStatusQueries
+@inject LocalizationService LocalizationService
+<!-- Navbar -->
+<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            @await Html.PartialAsync("_SelectLanguagePartial")
+        </li>
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+
+        @if (_iCheckInStatusQueries.CheckIsCategoryAssignedtoAgent(Context.Session.GetSession<long>("Portal.UserId")))
+        {
+
+            @(await Component.InvokeAsync<NotificationViewComponent>())
+
+        }
+
+        @if (_iCheckInStatusQueries.CheckIsCategoryAssignedtoAgent(Context.Session.GetSession<long>("Portal.UserId")))
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="true">
+                    @if (_iCheckInStatusQueries.CheckIsalreadyCheckedIn(Context.Session.GetSession<long>
+                       ("Portal.UserId")))
+                    {
+                        <i style="color: green" class="fa fa-bullseye"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-phone-square"></i>
+                    }
+                </a>
+                <div class="dropdown-menu dropdown-menu-md-right" style="left: inherit; right: 0px;">
+
+
+
+                    @if (_iCheckInStatusQueries.CheckIsalreadyCheckedIn(Context.Session.GetSession<long>
+                       ("Portal.UserId")))
+                    {
+                        <a href="javascript:void(0);" onclick="processout();" class="dropdown-item">
+                            <i style="color: red" class="fa fa-bullseye mr-2" aria-hidden="true"></i> Away
+                        </a>
+                    }
+                </div>
+            </li>
+
+        }
+
+
+
+        <li class="nav-item dropdown">
+            <a class="nav-link" data-toggle="dropdown" href="#">
+                <i class="fas fa-sign-out-alt"></i>
+
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+
+                @if (!string.IsNullOrEmpty(Convert.ToString(Context.Session.GetInt32("Portal.RoleId"))))
+                {
+
+                    if (Context.Session.GetInt32("Portal.RoleId") == Convert.ToInt32(RolesHelper.Roles.User))
+                    {
+                        <a asp-area="User" class="dropdown-item" asp-controller="MyAccount" asp-action="Changepassword">
+
+                            <!-- Message Start -->
+                            <div class="media">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        @LocalizationService.GetLocalizedHtmlString("ChangePassword")
+                                        <span class="float-right text-sm text-danger"><i class="fas fa-cog"></i></span>
+                                    </h3>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+
+                    }
+                    if (Context.Session.GetInt32("Portal.RoleId") == Convert.ToInt32(RolesHelper.Roles.Agent))
+                    {
+                        <a asp-area="User" class="dropdown-item" asp-controller="MyAccount" asp-action="Changepassword">
+
+                            <!-- Message Start -->
+                            <div class="media">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        @LocalizationService.GetLocalizedHtmlString("ChangePassword")
+                                        <span class="float-right text-sm text-danger"><i class="fas fa-cog"></i></span>
+                                    </h3>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+
+                    }
+
+                    if (Context.Session.GetInt32("Portal.RoleId") == Convert.ToInt32(RolesHelper.Roles.AgentAdmin))
+                    {
+                        <a asp-area="AgentManager" class="dropdown-item" asp-controller="MyAccount" asp-action="Changepassword">
+
+                            <!-- Message Start -->
+                            <div class="media">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        @LocalizationService.GetLocalizedHtmlString("ChangePassword")
+                                        <span class="float-right text-sm text-danger"><i class="fas fa-cog"></i></span>
+                                    </h3>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+
+                    }
+
+                    if (Context.Session.GetInt32("Portal.RoleId") == Convert.ToInt32(RolesHelper.Roles.Hod))
+                    {
+                        <a asp-area="Administrator" class="dropdown-item" asp-controller="MyAccount" asp-action="Changepassword">
+
+                            <!-- Message Start -->
+                            <div class="media">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        @LocalizationService.GetLocalizedHtmlString("ChangePassword")
+                                        <span class="float-right text-sm text-danger"><i class="fas fa-cog"></i></span>
+                                    </h3>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+
+                    }
+                    if (Context.Session.GetInt32("Portal.RoleId") == Convert.ToInt32(RolesHelper.Roles.SuperAdmin))
+                    {
+                        <a asp-area="Administration" class="dropdown-item" asp-controller="MyAccount" asp-action="Changepassword">
+
+                            <!-- Message Start -->
+                            <div class="media">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        @LocalizationService.GetLocalizedHtmlString("ChangePassword")
+                                        <span class="float-right text-sm text-danger"><i class="fas fa-cog"></i></span>
+                                    </h3>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+
+                    }
+                }
+                <form asp-area="" asp-controller="Portal" asp-antiforgery="false" id="LogoutForm" asp-action="Logout" method="post">
+                    <a href="javascript:void(0);" oncontextmenu="return false;" onclick="document.getElementById('LogoutForm').submit();" class="dropdown-item">
+                        <!-- Message Start -->
+                        <div class="media">
+                            <div class="media-body">
+                                <h3 class="dropdown-item-title">
+                                    @LocalizationService.GetLocalizedHtmlString("logout")
+                                    <span class="float-right text-sm text-danger"><i class="fas fa-power-off"></i></span>
+                                </h3>
+                            </div>
+                        </div>
+                        <!-- Message End -->
+                    </a>
+                </form>
+
+
+            </div>
+        </li>
+    </ul>
+</nav>
+<!-- /.navbar -->

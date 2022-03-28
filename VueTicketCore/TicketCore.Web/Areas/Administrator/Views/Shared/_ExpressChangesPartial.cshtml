@@ -1,0 +1,55 @@
+﻿
+@using TicketCore.Common
+@using TicketCore.Web.Helpers
+@model TicketCore.ViewModels.Tickets.ExpressChangesTicketViewModel
+
+@if (ViewBag.CurrentTicketStatus != null)
+{
+    if ((int)ViewBag.CurrentTicketStatus == (int)StatusMain.Status.Closed)
+    {
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label asp-for="Priority"></label> :
+                @Model.Priority
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label asp-for="AssignedTo"></label> :
+                @Model.AssignedTo
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <button type="button" id="btnreopenticket" class="btn btn-block btn-outline-secondary">
+                    <i class="fas fa-envelope-open-text"></i> Reopen Ticket
+                </button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label class="mandatory" asp-for="PriorityId"></label>
+                <select asp-for="PriorityId" class="form-control"
+                        asp-items="@(new SelectList(Model.ListofPriority, "Value", "Text"))">
+                </select>
+            </div>
+        </div>
+        @if ((string)ViewBag.DisableAssignTo == "1")
+        {
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label class="mandatory" asp-for="AssignedToId"></label>
+                    <select disabled="disabled" asp-for="AssignedToId" class="form-control"
+                            asp-items="@(new SelectList(Model.ListofUsers, "Value", "Text"))">
+                    </select>
+                </div>
+            </div>
+        }
+
+       
+    }
+}

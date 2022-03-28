@@ -1,0 +1,399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Action" xml:space="preserve">
+    <value>ऐक्शन</value>
+  </data>
+  <data name="Activities" xml:space="preserve">
+    <value>ऐक्टिवटीज़</value>
+  </data>
+  <data name="Agent" xml:space="preserve">
+    <value>एजन्ट</value>
+  </data>
+  <data name="AgentsTicketDetails" xml:space="preserve">
+    <value>एजन्ट तिकीट तपशील</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>सर्व</value>
+  </data>
+  <data name="AllAssignedTicket" xml:space="preserve">
+    <value>सर्व नियुक्त तिकिटे</value>
+  </data>
+  <data name="AllClosedTicket" xml:space="preserve">
+    <value>सर्व क्लोज़्ड तिकिटे</value>
+  </data>
+  <data name="AllDeletedTicket" xml:space="preserve">
+    <value>सर्व डिलीटड तिकिटे</value>
+  </data>
+  <data name="AllReportedTicket" xml:space="preserve">
+    <value>सर्व नोंदवले टिकेट्स</value>
+  </data>
+  <data name="Articles" xml:space="preserve">
+    <value>लेख</value>
+  </data>
+  <data name="Assign" xml:space="preserve">
+    <value>काम नेमूण देणे</value>
+  </data>
+  <data name="Assignedto" xml:space="preserve">
+    <value>नियुक्त केले</value>
+  </data>
+  <data name="AssigntoAgent" xml:space="preserve">
+    <value>एजंटला नियुक्त करा</value>
+  </data>
+  <data name="Attachment" xml:space="preserve">
+    <value>संलग्नक</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>संलग्नक</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>पासवर्ड बदला</value>
+  </data>
+  <data name="ChangePriority" xml:space="preserve">
+    <value>प्राधान्यक्रम बदला</value>
+  </data>
+  <data name="ChangeStatus" xml:space="preserve">
+    <value>स्थिती बदला</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>पासवर्डची पुष्टी करा</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>कन्टेन्ट</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>क्रिएट</value>
+  </data>
+  <data name="CreatedOn" xml:space="preserve">
+    <value>क्रीटेड ऑन</value>
+  </data>
+  <data name="CreatedResolvedTicket" xml:space="preserve">
+    <value>क्रीटेड / रेसॉल्व्हड तिकीट  </value>
+  </data>
+  <data name="CreateKnowledgebase" xml:space="preserve">
+    <value>क्रिएट नॉलेज बेस</value>
+  </data>
+  <data name="CreateNewUser" xml:space="preserve">
+    <value>नवीन वापरकर्ता तयार करा</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>डॅशबोर्ड</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>डिलीट</value>
+  </data>
+  <data name="Department" xml:space="preserve">
+    <value>विभाग</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>वर्णन</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>डाउनलोड</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>सुधारणे</value>
+  </data>
+  <data name="EditKnowledgebase" xml:space="preserve">
+    <value>नॉलेज बेस सुधारणे</value>
+  </data>
+  <data name="EditTicket" xml:space="preserve">
+    <value>एडिट तिकीट</value>
+  </data>
+  <data name="EditTicketReply" xml:space="preserve">
+    <value>एडिट तिकीट रिप्लाय</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>ईमेल</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>पहिले नाव</value>
+  </data>
+  <data name="Fromdate" xml:space="preserve">
+    <value>या तारखेपासून</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>पूर्ण नाव</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>लिंग</value>
+  </data>
+  <data name="Keywords" xml:space="preserve">
+    <value>सूचनक शब्द</value>
+  </data>
+  <data name="Knowledgebase" xml:space="preserve">
+    <value>नॉलेज बेस</value>
+  </data>
+  <data name="KnowledgebaseCategories" xml:space="preserve">
+    <value>नॉलेज बेस श्रेण्या</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>आडनाव</value>
+  </data>
+  <data name="logout" xml:space="preserve">
+    <value>लॉगऑऊट</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>संदेश</value>
+  </data>
+  <data name="MobileNo" xml:space="preserve">
+    <value>मोबाईल नंबर</value>
+  </data>
+  <data name="MostOpenTicket" xml:space="preserve">
+    <value>मोस्ट ओपन तिकीट</value>
+  </data>
+  <data name="MostResolvedTicket" xml:space="preserve">
+    <value>मोस्ट रेसॉल्व्हड तिकीट</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>नाव</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>नवीन पासवर्ड</value>
+  </data>
+  <data name="NewTicket" xml:space="preserve">
+    <value>नवीन तिकीट</value>
+  </data>
+  <data name="NoAttachments" xml:space="preserve">
+    <value>संलग्नक नाही</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>नोट</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>सूचना</value>
+  </data>
+  <data name="NotificationDate" xml:space="preserve">
+    <value>सूचना दिनांक</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>सूचना प्रकार</value>
+  </data>
+  <data name="OldPassword" xml:space="preserve">
+    <value>जुना पासवर्ड</value>
+  </data>
+  <data name="OverdueType" xml:space="preserve">
+    <value>ओव्हरड्यू प्रकार</value>
+  </data>
+  <data name="Priority" xml:space="preserve">
+    <value>प्राधान्य</value>
+  </data>
+  <data name="QuickAssign" xml:space="preserve">
+    <value>त्वरित नियुक्त करा</value>
+  </data>
+  <data name="QuickChange" xml:space="preserve">
+    <value>द्रुत बदल</value>
+  </data>
+  <data name="Quickinformation" xml:space="preserve">
+    <value>द्रुत माहिती</value>
+  </data>
+  <data name="ReOpenTicket" xml:space="preserve">
+    <value>तिकीट पुन्हा उघडा</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>अहवाल</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>अहवाल</value>
+  </data>
+  <data name="Requester" xml:space="preserve">
+    <value>विनंती करणारा</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>भूमिका</value>
+  </data>
+  <data name="RoleName" xml:space="preserve">
+    <value>भूमिकेचे नाव</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>शोध</value>
+  </data>
+  <data name="SearchIn" xml:space="preserve">
+    <value>येथे शोधा</value>
+  </data>
+  <data name="StarTicketHunter" xml:space="preserve">
+    <value>स्टार तिकीट हंटर</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>स्थिती</value>
+  </data>
+  <data name="Subject" xml:space="preserve">
+    <value>विषय</value>
+  </data>
+  <data name="Team" xml:space="preserve">
+    <value>संघ</value>
+  </data>
+  <data name="TicketAssignedDate" xml:space="preserve">
+    <value>तिकीट नियुक्त केलेली दिनांक</value>
+  </data>
+  <data name="TicketAttachment" xml:space="preserve">
+    <value>तिकीट संलग्नक</value>
+  </data>
+  <data name="TicketDetails" xml:space="preserve">
+    <value>तिकीट तपशील</value>
+  </data>
+  <data name="TicketFound" xml:space="preserve">
+    <value>तिकीट सापडल्या</value>
+  </data>
+  <data name="TicketHistory" xml:space="preserve">
+    <value>तिकीट इतिहास</value>
+  </data>
+  <data name="TicketId" xml:space="preserve">
+    <value>तिकीट आयडी</value>
+  </data>
+  <data name="TicketPriority" xml:space="preserve">
+    <value>तिकीट प्राधान्यक्रम</value>
+  </data>
+  <data name="TicketReply" xml:space="preserve">
+    <value>तिकीट रिप्लाय</value>
+  </data>
+  <data name="Tickets" xml:space="preserve">
+    <value>तिकीट</value>
+  </data>
+  <data name="TicketStatus" xml:space="preserve">
+    <value>तिकीट स्थिती</value>
+  </data>
+  <data name="TicketUpdatedDate" xml:space="preserve">
+    <value>तिकीट अप्डैटड तारीख</value>
+  </data>
+  <data name="TicketView" xml:space="preserve">
+    <value>तिकीट दृश्य</value>
+  </data>
+  <data name="TicketVolumebyMonth" xml:space="preserve">
+    <value>महिन्यानुसार तिकिटाची मात्रा</value>
+  </data>
+  <data name="Todate" xml:space="preserve">
+    <value>आत्तापर्यंत</value>
+  </data>
+  <data name="TrackingId" xml:space="preserve">
+    <value>ट्रॅकिंग आयडी</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>प्रकार</value>
+  </data>
+  <data name="UnAssignedTickets" xml:space="preserve">
+    <value>नियुक्त न केलेली तिकिटे</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>वापरकर्तानाव</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>पहा</value>
+  </data>
+</root>

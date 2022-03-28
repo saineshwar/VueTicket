@@ -1,0 +1,227 @@
+﻿@model TicketCore.ViewModels.Tickets.EditTicketViewModel
+@using TicketCore.Web.Resources
+@inject LocalizationService LocalizationService
+@{
+    ViewBag.PageName = "";
+
+}
+
+<div class="col-md-12">
+
+    <form asp-controller="MyTicket" id="Ticketform" asp-antiforgery="true" enctype="multipart/form-data" asp-action="Edit" method="post">
+        <div class="card card-cyan card-outline">
+            <div class="card-header">
+                <h3 class="card-title">@LocalizationService.GetLocalizedHtmlString("EditTicket")</h3>
+            </div>
+
+
+            <div class="card-body register-card-body">
+                <div class="form-row">
+                    <input type="hidden" asp-for="TicketId" />
+                    <input type="hidden" asp-for="DepartmentId" />
+                    <input type="hidden" asp-for="PriorityId" />
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="DepartmentId"></label>
+                        <select disabled="disabled" asp-for="DepartmentId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofDepartment, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="DepartmentId"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="PriorityId"></label>
+                        <select disabled="disabled" asp-for="PriorityId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofPriority, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="PriorityId"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="mandatory" asp-for="Subject"></label>
+                        <input asp-for="Subject" placeholder="Enter Subject" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Subject"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card card-cyan card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Ticket Description</h3>
+            </div>
+            <div class="card-body register-card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="mandatory" asp-for="Message"></label>
+                        <textarea asp-for="Message" placeholder="Message" class="form-control" required="required"></textarea>
+                        <span class="text-danger" asp-validation-for="Message"></span>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <input name="file1" id="file1" onchange="ValidateDocumentFile(this);" type="file" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <input name="file2" id="file2" onchange="ValidateDocumentFile(this);" type="file" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <input name="file3" id="file3" onchange="ValidateDocumentFile(this);" type="file" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-cyan card-outline">
+            <div class="card-header">
+                <h3 class="card-title">@LocalizationService.GetLocalizedHtmlString("TicketAttachment")</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <div class="card-body register-card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+
+                        @if (Model.ListofAttachments != null)
+                        {
+                            @if (Model.ListofAttachments.Any())
+                            {
+
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>@LocalizationService.GetLocalizedHtmlString("Attachment")</th>
+                                            <th>@LocalizationService.GetLocalizedHtmlString("Download")</th>
+                                            <th>@LocalizationService.GetLocalizedHtmlString("Action")</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var attachment in Model.ListofAttachments)
+                                        {
+                                            <tr>
+                                                <td>@attachment.OriginalAttachmentName</td>
+                                                <td>
+                                                    <a class="btn btn-primary"
+                                                       data-toggle="tooltip" data-placement="top"
+                                                       title="Download Attachment !" onclick="downloadAttachment('@Model.TicketId', '@attachment.AttachmentId')" href="javascript:void(0);"> <i class="fa fa-download"></i> @LocalizationService.GetLocalizedHtmlString("Download") </a>
+
+                                                </td>
+                                                <td>
+                                                    <a data-toggle="tooltip"
+                                                       data-placement="top"
+                                                       title="Delete Attachment !"
+                                                       class="btn btn-danger" onclick="deleteAttachment('@attachment.AttachmentId', '@Model.TicketId')" href="javascript:void(0);"> <i class="fa fa-trash"></i> 
+                                                        @LocalizationService.GetLocalizedHtmlString("Delete")
+                                                         </a>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+
+                            }
+                            else
+                            {
+                                <p>        @LocalizationService.GetLocalizedHtmlString("NoAttachments")</p>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card card-success card-outline">
+            <!-- /.card-header -->
+            <!-- form start -->
+            <div class="card-body register-card-body">
+                <button type="button" id="btnsubmit" class="btn btn-success"> <i class="fas fa-check-circle"></i> Submit</button>
+                <a asp-area="Administrator" class="btn btn-primary" asp-controller="MyTicket" asp-action="AllTickets"><i class="fas fa-ban"></i> Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="~/js/ckeditor/ckeditor.js"></script>
+<script asp-append-version="true" src="~/Scripts/custom/validate.file.js"></script>
+@section Scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#btnsubmit").click(function () {
+                if ($('#Ticketform').valid()) {
+
+                    var textboxData = CKEDITOR.instances.Message.getData();
+                    if (textboxData === '') {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Enter Description.',
+                            type: 'red'
+                        });
+                    } else {
+                        $.confirm({
+                            title: 'Confirmation!',
+                            type: 'green',
+                            content: 'Do you want to Create Ticket?',
+                            buttons: {
+                                confirm: function () {
+                                    $("#loader").show();
+                                    $('#Ticketform').submit();
+                                },
+                                cancel: function () {
+                                    $.alert('Canceled!');
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+
+        CKEDITOR.replace('Message', { htmlEncodeOutput: true });
+
+        function downloadAttachment(ticketId, attachmentsId) {
+            window.location = "/Administrator/MyTicketDetails/DownloadAttachment?ticketId=" + ticketId + "&AttachmentId=" + attachmentsId;
+        }
+
+        function deleteAttachment(attachmentsId, ticketId) {
+            var result = confirm("Do you want to delete this attachment!");
+            if (result === true) {
+                if (attachmentsId != "") {
+                    var jsonObject =
+                    {
+                        attachmentsId: attachmentsId,
+                        ticketId: ticketId
+                    };
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Administrator/MyTicketDetails/DeleteAttachment",
+                        dataType: "json",
+                        data: jsonObject,
+                        success: function (data, textStatus, xhr) {
+                            if (data.Status === true) {
+                                alert("Attachment Deleted Successfully");
+                                location.reload();
+                            } else {
+                                alert("Something Went Wrong While Deleting Ticket Please Try Again after Sometime!");
+                            }
+
+                        },
+                        error: function (xhr, status, err) {
+                            if (xhr.status == 400) {
+                                DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+    </script>
+}

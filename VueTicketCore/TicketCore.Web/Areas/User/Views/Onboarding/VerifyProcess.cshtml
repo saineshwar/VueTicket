@@ -1,0 +1,33 @@
+﻿@model TicketCore.ViewModels.Usermaster.OnboardingUserViewModel
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Update Personal Details </h3>
+        </div>
+        <div class="card-body register-card-body">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label class="mandatory" asp-for="FirstName"></label>
+                    <input asp-for="FirstName" placeholder="Enter FirstName" class="form-control" />
+                    <span class="text-danger" asp-validation-for="FirstName"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="mandatory" asp-for="LastName"></label>
+                    <input asp-for="LastName" placeholder="Enter LastName" class="form-control" />
+                    <span class="text-danger" asp-validation-for="LastName"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Gender"></label>
+                    <input asp-for="Gender" type="radio" value="M" /><label>Male</label>
+                    <input asp-for="Gender" type="radio" value="F" /><label>Female</label>
+                    <br />
+                    <span class="text-danger" asp-validation-for="Gender"></span>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" id="btnsubmit" class="btn btn-success">Save</button>
+        </div>
+    </div>
+</div>

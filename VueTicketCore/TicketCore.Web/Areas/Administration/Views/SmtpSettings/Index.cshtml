@@ -1,0 +1,278 @@
+﻿@{
+    ViewBag.PageName = "SMTP Configuration";
+}
+@using TicketCore.Web.Resources
+@inject LocalizationService LocalizationService
+@await Html.PartialAsync("~/Views/Shared/_DatatablesCss.cshtml")
+
+
+<div class="col-md-12">
+    <div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title">@LocalizationService.GetLocalizedHtmlString("All")</h3>
+        </div>
+        <div class="card-body">
+            <table id="CommonDataTable" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>SmtpProviderId</th>
+                        <th>Name</th>
+                        <th>Host</th>
+                        <th>Port</th>
+                        <th>Timeout</th>
+                        <th>SSL</th>
+                        <th>TLS</th>
+                        <th>Username</th>
+                        <th>IsDefault</th>
+                        <th>SetDefault</th>
+                        <th>Connection</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@await Html.PartialAsync("~/Views/Shared/_DatatablesScripts.cshtml")
+@Html.Hidden("item-to-delete", "", new { @id = "item-to-delete" })
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#CommonDataTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "order": [[0, "desc"]],
+                "filter": true,
+                "ajax": {
+                    "url": "/Administration/SmtpSettings/GetAllSmtpSettings",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }, {
+                        "targets": [1],
+                        "orderable": false,
+                        "searchable": false
+                    }, {
+                        "targets": [2],
+                        "orderable": false,
+                        "searchable": false
+                    }, {
+                        "targets": [3],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [4],
+                        "orderable": false,
+                        "searchable": false
+                    }, {
+                        "targets": [5],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [6],
+                        "orderable": false,
+                        "searchable": false
+                    }, {
+                        "targets": [7],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [8],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [9],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [10],
+                        "orderable": false,
+                        "searchable": false
+                    }, {
+                        "targets": [11],
+                        "orderable": false,
+                        "searchable": false
+                    }
+
+
+                ],
+                "columns": [
+                    { "data": "SmtpProviderId", "name": "SmtpProviderId", "autoWidth": true },
+                    { "data": "Name", "name": "Name", "autoWidth": true },
+                    { "data": "Host", "name": "Host", "autoWidth": true },
+                    { "data": "Port", "name": "Port", "autoWidth": true },
+                    { "data": "Timeout", "name": "Timeout", "autoWidth": true },
+                    {
+                        "render": function (data, type, full, meta) {
+                            if (full.SslProtocol == "Y") {
+                                return '<button type="button" class="btn btn-success" disabled>Yes</button>';
+                            }
+                            if (full.SslProtocol == "N") {
+                                return '<button type="button" class="btn btn-danger" disabled>No</button>';
+                            }
+                        }
+                    },
+                    {
+                        "render": function (data, type, full, meta) {
+                            if (full.TlSProtocol == "Y") {
+                                return '<button type="button" class="btn btn-success" disabled>Yes</button>';
+                            }
+                            if (full.TlSProtocol == "N") {
+                                return '<button type="button" class="btn btn-danger" disabled>No</button>';
+                            }
+                        }
+                    },
+                    { "data": "Username", "name": "Username", "autoWidth": true },
+                    {
+                        "render": function (data, type, full, meta) {
+                            if (full.IsDefault == "Yes") {
+                                return '<button type="button" class="btn btn-success" disabled>Yes</button>';
+                            }
+                            if (full.IsDefault == "No") {
+                                return '<button type="button" class="btn btn-danger" disabled>No</button>';
+                            }
+                        }
+                    },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return '<button type="button" onclick="SetDefault(\'' + full.SmtpProviderId + '\');" class="btn btn-primary">Default</button>';
+                        }
+                    },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return '<button type="button" onclick="TestConnection(\'' + full.SmtpProviderId + '\');" class="btn btn-primary">Test</button>';
+                        }
+                    },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return '<a class="btn btn-default" href="/Administration/SmtpSettings/Edit/' + full.SmtpProviderId + '"> <i class="fas fa-pencil-alt"></i></a>';
+                        }
+                    }
+                ]
+            });
+
+
+
+        });
+
+        function Delete(roleId) {
+            $.confirm({
+                title: 'Delete!',
+                content: 'Do you want to Delete Role!',
+                buttons: {
+                    confirm: function () {
+
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                }
+            });
+        }
+
+        function SetDefault(value) {
+            $.confirm({
+                title: 'Set Default Connection!',
+                type: 'green',
+                content: 'Do you want to Set Default Connection!',
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            type: "POST", //HTTP POST Method
+                            url: "/Administration/SmtpSettings/SetDefaultConnection",
+                            data: { SmtpProviderId: value },
+                            success: function (data) {
+                                if (data.status == "Success") {
+                                    $.confirm({
+                                        title: 'Message!',
+                                        type: 'green',
+                                        content: 'Default Connection is Updated Successfully',
+                                        buttons: {
+                                            OK: function () {
+                                                location.reload();
+                                            },
+                                            cancel: function () {
+                                                $.alert('Canceled!');
+                                                location.reload();
+                                            }
+                                        }
+                                    });
+                                }
+                                else {
+                                    $.alert('Error Occured while Setting Default Connection');
+                                }
+
+                            }
+                        });
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                }
+            });
+
+        }
+
+        function TestConnection(value) {
+            $.confirm({
+                title: 'Test Connection!',
+                type: 'green',
+                content: 'Do you want to Test Connection!',
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            type: "POST", //HTTP POST Method
+                            url: "/Administration/SmtpSettings/TestConnection",
+                            data: { SmtpProviderId: value },
+                            success: function (data) {
+                                if (data.status == "Success") {
+                                    $.confirm({
+                                        title: 'Message!',
+                                        type: 'green',
+                                        content: 'Connection Working Properly',
+                                        buttons: {
+                                            OK: function () {
+                                                location.reload();
+                                            },
+                                            cancel: function () {
+                                                $.alert('Canceled!');
+                                                location.reload();
+                                            }
+                                        }
+                                    });
+
+                                }
+                                else {
+                                    $.alert('Testing Failed. Check Email Settings');
+                                }
+                            }
+                        });
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                }
+            });
+
+        }
+    </script>
+
+
+}
+

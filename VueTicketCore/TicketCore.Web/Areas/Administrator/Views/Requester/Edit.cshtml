@@ -1,0 +1,89 @@
+﻿@using TicketCore.Web.Resources
+@model TicketCore.ViewModels.Usermaster.EditUserViewModel
+@inject LocalizationService LocalizationService
+@{
+    ViewBag.PageName = "Users";
+}
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">@LocalizationService.GetLocalizedHtmlString("Edit")</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form asp-controller="Requester" asp-antiforgery="true" asp-action="Edit" method="post">
+
+            <div class="card-body register-card-body">
+                <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                <input asp-for="UserId" type="hidden" />
+                <input asp-for="RoleId" type="hidden" />
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="FirstName"></label>
+                        <input asp-for="FirstName" placeholder="Enter FirstName" class="form-control" />
+                        <span class="text-danger" asp-validation-for="FirstName"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="LastName"></label>
+                        <input asp-for="LastName" placeholder="Enter LastName" class="form-control" />
+                        <span class="text-danger" asp-validation-for="LastName"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="Gender"></label>
+                            <input asp-for="Gender" type="radio" value="M" /><label>Male</label>
+                        <input asp-for="Gender" type="radio" value="F" /><label>Female</label>
+                        <br />
+                        <span class="text-danger" asp-validation-for="Gender"></span>
+                    </div>
+
+                </div>
+                <div class="form-row">
+
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="MobileNo"></label>
+                        <input asp-for="MobileNo" placeholder="Enter MobileNo" maxlength="10" class="form-control" />
+                        <span class="text-danger" asp-validation-for="MobileNo"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="EmailId"></label>
+                        <input asp-for="EmailId" placeholder="Enter EmailId" class="form-control" />
+                        <span class="text-danger" asp-validation-for="EmailId"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="UserName"></label>
+                        <input asp-for="UserName" readonly="readonly" placeholder="Enter UserName" class="form-control" />
+                        <span class="text-danger" asp-validation-for="UserName"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="mandatory"  asp-for="RoleId"></label>
+                        <select disabled="disabled" asp-for="RoleId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofRoles, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="RoleId"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory"  asp-for="Status"></label>
+                        <input asp-for="Status" type="checkbox" />
+                        <span class="text-danger" asp-validation-for="Status"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success">Save</button>
+                <a asp-area="Administrator" class="btn btn-danger" asp-controller="Requester" asp-action="Create">Clear</a>
+                <a asp-area="Administrator" class="btn btn-primary" asp-controller="Requester" asp-action="Index">List</a>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -1,0 +1,92 @@
+﻿@model TicketCore.ViewModels.CategoryConfigrations.ConfigureJobViewModel
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Configure Application Jobs</h3>
+        </div>
+        <form autocomplete="off" asp-controller="ConfigureJobs" asp-antiforgery="true" asp-action="Process" method="post">
+            <div class="card-body register-card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+
+                        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                            <input asp-for="AssignTicketsJob" type="checkbox" class="custom-control-input" />
+                            <label class="custom-control-label" asp-for="AssignTicketsJob"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+
+                        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                            <input asp-for="TicketOverdueJob" type="checkbox" class="custom-control-input" />
+                            <label class="custom-control-label" asp-for="TicketOverdueJob"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+
+                        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                            <input asp-for="OverdueNotificationJob" type="checkbox" class="custom-control-input" />
+                            <label class="custom-control-label" asp-for="OverdueNotificationJob"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+
+                        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                            <input asp-for="OverdueEveryResponsJob" type="checkbox" class="custom-control-input" />
+                            <label class="custom-control-label" asp-for="OverdueEveryResponsJob"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+
+                        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                            <input asp-for="AutoEscalationJobStage1" type="checkbox" class="custom-control-input" />
+                            <label class="custom-control-label" asp-for="AutoEscalationJobStage1"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+
+                        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                            <input asp-for="AutoEscalationJobStage2" type="checkbox" class="custom-control-input" />
+                            <label class="custom-control-label" asp-for="AutoEscalationJobStage2"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+
+                        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                            <input asp-for="AutoCloseTicketsJob" type="checkbox" class="custom-control-input" />
+                            <label class="custom-control-label" asp-for="AutoCloseTicketsJob"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="form-row">
+                    <button type="submit" id="btnsubmit" class="btn btn-success">Save</button>
+                </div>
+                <br/>
+                <div class="form-row">
+                    <div class="alert alert-danger alert-dismissible">
+                        
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        Make this changes when Users are Not Using Application.
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+

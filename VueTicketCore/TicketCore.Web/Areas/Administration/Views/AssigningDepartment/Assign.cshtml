@@ -1,0 +1,66 @@
+﻿@model TicketCore.ViewModels.CategoryConfigrations.DepartmentConfigrationViewModel
+@{
+    ViewBag.PageName = " Assigning Department";
+}
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Assign</h3>
+        </div>
+        <form autocomplete="off" asp-controller="AssigningDepartment" asp-antiforgery="true" asp-action="Assign" method="post">
+            <div class="card-body register-card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory"  asp-for="DepartmentId"></label>
+                        <select asp-for="DepartmentId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofDepartment, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="DepartmentId"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+
+                    </div>
+                    <div class="form-group col-md-4">
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory"  asp-for="BusinessHoursId"></label>
+                        <select asp-for="BusinessHoursId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofBusinessHours, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="BusinessHoursId"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory"  asp-for="AgentAdminUserId"></label>
+                        <select asp-for="AgentAdminUserId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofAdmin, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="AgentAdminUserId"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory"  asp-for="HodUserId"></label>
+                        <select asp-for="HodUserId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofHod, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="HodUserId"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label asp-for="Status"></label>
+                        <input asp-for="Status" type="checkbox" />
+                        <span class="text-danger" asp-validation-for="Status"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" id="btnsubmit" class="btn btn-success">Save</button>
+                <a asp-area="Administration" class="btn btn-danger" asp-controller="AssigningDepartment" asp-action="Assign">Clear</a>
+                <a asp-area="Administration" class="btn btn-primary" asp-controller="AssigningDepartment" asp-action="Index">List</a>
+            </div>
+        </form>
+    </div>
+</div>

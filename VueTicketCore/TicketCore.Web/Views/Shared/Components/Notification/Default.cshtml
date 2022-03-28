@@ -1,0 +1,29 @@
+﻿@model List<TicketCore.ViewModels.Notifications.ShowNotificationViewModel>
+
+<li class="nav-item dropdown">
+    <a class="nav-link" data-toggle="dropdown" href="javascript:void(0);" aria-expanded="false">
+        <i class="far fa-bell"></i>
+        <span class="badge badge-danger navbar-badge"><b>@ViewBag.TotalNotificationCount</b> </span>
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
+        <span class="dropdown-item dropdown-header"> <b>@ViewBag.NotificationCount Notifications</b> </span>
+        <div class="dropdown-divider"></div>
+
+        @foreach (var notification in Model)
+        {
+
+            <a href="javascript:void(0);" class="dropdown-item">
+                <i class="fas fa-envelope mr-2"></i> @notification.NotificationCount @notification.NotificationType messages
+                <span class="float-right text-muted text-sm">@notification.TotalMinutes mins</span>
+            </a>
+
+            <div class="dropdown-divider"></div>
+
+        }
+
+
+        <a asp-area="User" class="dropdown-item dropdown-footer" asp-controller="MyDashboard" asp-action="Notification">See All Notifications</a>
+
+    </div>
+</li>

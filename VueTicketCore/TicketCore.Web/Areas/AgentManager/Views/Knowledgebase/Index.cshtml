@@ -1,0 +1,155 @@
+﻿@{
+    ViewBag.PageName = "";
+}
+@using TicketCore.Web.Resources
+@inject LocalizationService LocalizationService
+
+
+@await Html.PartialAsync("~/Views/Shared/_DatatablesCss.cshtml")
+
+
+<div class="col-md-12">
+    <div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title">@LocalizationService.GetLocalizedHtmlString("All")</h3>
+        </div>
+        <div class="card-body">
+            <table id="DatatablesKB" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>KnowledgebaseId</th>
+                        <th>Subject</th>
+                        <th>Department</th>
+                        <th>Knowledgebase Type</th>
+                        <th>CreateDate</th>
+                        <th>Status</th>
+
+                        <th>Edit</th>
+
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Views/Shared/_DatatablesScripts.cshtml")
+
+@section scripts
+{
+
+    <script src="~/plugins/moment/moment.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#DatatablesKB').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "order": [[0, "desc"]],
+                "filter": true,
+                "ajax": {
+                    "url": "/AgentManager/Knowledgebase/GridAllKnowledgebase",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }, {
+                        "targets": [2],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [3],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [4],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [5],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [6],
+                        "orderable": false,
+                        "searchable": false
+                    }
+
+
+
+                ],
+                "columns": [
+                    { "data": "KnowledgebaseId", "name": "KnowledgebaseId", "autoWidth": true },
+                    { "data": "Subject", "name": "Subject", "autoWidth": true },
+                    { "data": "DepartmentName", "name": "DepartmentName", "autoWidth": true },
+                    { "data": "KnowledgebaseTypeName", "name": "KnowledgebaseTypeName", "autoWidth": true },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return moment(full.CreateDate).format("DD/MM/YYYY");
+                        }
+                    },
+                    {
+                        "render": function (data, type, full, meta) {
+
+                            if (full.Status == "Active") {
+                                return '<button type="button" class="btn btn-success" onclick="Delete(' + full.KnowledgebaseId + ',' + false + ');">  Active  </button>';
+                            }
+                            if (full.Status == "InActive") {
+                                return '<button type="button" class="btn btn-danger" onclick="Delete(' + full.KnowledgebaseId + ',' + true + ');">  InActive </button>';
+                            }
+                        }
+                    },
+                    {
+                        "render": function (data, type, full, meta) { return '<a class="btn btn-primary" href="/AgentManager/Knowledgebase/Edit/' + full.KnowledgebaseId + '"> Edit</a>'; }
+                    }
+
+                ]
+            });
+        });
+
+        function Delete(KnowledgebaseId, status) {
+            $.confirm({
+                title: 'Change Status!',
+                content: 'Do you want to Change Status!',
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            url: "/AgentManager/Knowledgebase/ChangeStatus",
+                            type: "POST",
+                            data: { knowledgebaseId: KnowledgebaseId, Status: status },
+                            success: function (data, textStatus, xhr) {
+                                if (data.Result == "success") {
+                                    location.reload();
+                                }
+                                if (data.Result == "failed") {
+                                    $.alert('Something Went Wrong');
+                                }
+                            },
+                            error: function (xhr, status, err) {
+                                if (xhr.status == 401) {
+                                    alert('Error');
+                                    window.location.href = "/Portal/Logout";
+                                }
+                                if (xhr.status == 500) {
+                                    alert('Error');
+                                    window.location.href = "/Portal/Logout";
+                                }
+                            }
+                        });
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                }
+            });
+        }</script>
+
+
+}

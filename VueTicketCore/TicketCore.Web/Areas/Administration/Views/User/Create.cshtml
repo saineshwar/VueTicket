@@ -1,0 +1,180 @@
+﻿@model TicketCore.ViewModels.Usermaster.CreateUserViewModel
+@{ ViewBag.PageName = "Users"; }
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Add</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form asp-controller="User" asp-antiforgery="true" asp-action="Create" method="post">
+
+            <div class="card-body register-card-body">
+                <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="FirstName"></label>
+                        <input asp-for="FirstName" placeholder="Enter FirstName" class="form-control" />
+                        <span class="text-danger" asp-validation-for="FirstName"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="LastName"></label>
+                        <input asp-for="LastName" placeholder="Enter LastName" class="form-control" />
+                        <span class="text-danger" asp-validation-for="LastName"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="EmailId"></label>
+                        <input asp-for="EmailId" placeholder="Enter EmailId" class="form-control" />
+                        <span class="text-danger" asp-validation-for="EmailId"></span>
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="mandatory"  asp-for="Gender"></label>
+                        <input asp-for="Gender" type="radio" value="M" /><label>Male</label>
+                        <input asp-for="Gender" type="radio" value="F" /><label>Female</label>
+                        <br />
+                        <span class="text-danger" asp-validation-for="Gender"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="MobileNo"></label>
+                        <input asp-for="MobileNo" placeholder="Enter MobileNo" maxlength="10" class="form-control" />
+                        <span class="text-danger" asp-validation-for="MobileNo"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="UserName"></label>
+                        <input asp-for="UserName" placeholder="Enter UserName" class="form-control" />
+                        <span class="text-danger" asp-validation-for="UserName"></span>
+                    </div>
+
+                </div>
+                <div class="form-row">
+
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="Password"></label>
+                        <input asp-for="Password" placeholder="Enter Password" type="password" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Password"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="ConfirmPassword"></label>
+                        <input asp-for="ConfirmPassword" placeholder="Enter Confirm Password" type="password" class="form-control" />
+                        <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="RoleId"></label>
+                        <select asp-for="RoleId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofRoles, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="RoleId"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    
+                    <div class="form-group col-md-4">
+                        <label asp-for="Status"></label>
+                        <input asp-for="Status" type="checkbox" />
+                        <span class="text-danger" asp-validation-for="Status"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+                <button type="submit" id="btnsubmit" class="btn btn-success">Save</button>
+                <a asp-area="Administration" class="btn btn-danger" asp-controller="User" asp-action="Create">Clear</a>
+                <a asp-area="Administration" class="btn btn-primary" asp-controller="User" asp-action="Index">List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/scripts/sha256.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnsubmit").click(function () {
+            if ($('#Password').val() != "" && $('#ConfirmPassword').val() != "" && $('#CurrentPassword').val() != "") {
+
+                if (validatePassword($('#Password').val()) == false) {
+                    alert('New Password Must Have Minimum 7 characters at least 1 Alphabet, 1 Number and 1 Special Character !');
+                    return false;
+                }
+                else {
+
+                    var password = $('#Password').val();
+                    var passwordhash = Sha256.hash(password, false);
+
+                    var confirmpassword = $('#ConfirmPassword').val();
+                    var confirmpasswordhash = Sha256.hash(confirmpassword, false);
+
+                    var currentpassword = $('#CurrentPassword').val();
+                    var currentpasswordhash = Sha256.hash(currentpassword, false);
+
+                    $('#CurrentPassword').val(currentpasswordhash);
+                    $('#Password').val(passwordhash);
+                    $('#ConfirmPassword').val(confirmpasswordhash);
+                    $("#userform").submit();
+                }
+
+
+            }
+
+
+        });
+
+        $("#Password").blur(function (event) {
+            if ($("#Password").val() != "") {
+                if (validatePassword($("#Password").val()) == false) {
+                    alert('New Password Must Have Minimum 7 characters at least 1 Alphabet, 1 Number and 1 Special Character !');
+                    $("#Password").val('');
+                }
+
+                var data = $("#Password").val().length;
+                if (data > 20) {
+                    alert('Maximum 20 character password is Allowed!');
+                    $("#Password").val('');
+                }
+            }
+
+        });
+
+
+        $("#UserName").keypress(function (e) {
+            var regex = new RegExp("^[a-zA-Z]+$");
+            var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+            if (regex.test(strigChar)) {
+                return true;
+            }
+            return false;
+        });
+
+        $("#FirstName").keypress(function (e) {
+            var regex = new RegExp("^[a-zA-Z]+$");
+            var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+            if (regex.test(strigChar)) {
+                return true;
+            }
+            return false;
+        });
+
+        $("#LastName").keypress(function (e) {
+            var regex = new RegExp("^[a-zA-Z]+$");
+            var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+            if (regex.test(strigChar)) {
+                return true;
+            }
+            return false;
+        });
+    });
+
+
+    function validatePassword(password) {
+        var reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@@$!%*#?&])[A-Za-z\d$@@$!%*#?&]{7,}$/;
+        if (reg.test(password)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>

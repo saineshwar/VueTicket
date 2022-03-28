@@ -1,0 +1,183 @@
+﻿@using TicketCore.Web.Resources
+@{
+    ViewBag.PageName = "General Settings";
+}
+@inject LocalizationService LocalizationService
+@await Html.PartialAsync("~/Views/Shared/_DatatablesCss.cshtml")
+
+<div class="col-md-12">
+    <div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title"> @LocalizationService.GetLocalizedHtmlString("All")</h3>
+        </div>
+        <div class="card-body">
+            <table id="SmtpSettingsDataTable" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>SmtpProviderId</th>
+                        <th>Name</th>
+                        <th>Host</th>
+                        <th>Port</th>
+                        <th>SslProtocol</th>
+                        <th>TlSProtocol</th>
+                        <th>Username</th>
+                        <th>IsDefault</th>
+                        <th>SetDefault</th>
+                        <th>Delete</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@await Html.PartialAsync("~/Views/Shared/_DatatablesScripts.cshtml")
+@Html.Hidden("item-to-delete", "", new { @id = "item-to-delete" })
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#SmtpSettingsDataTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                "ajax": {
+                    "url": "/Administration/ApplicationSetting/GridAllSmtpSettings",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }, {
+                        "targets": [2],
+                        "orderable": false,
+                        "searchable": false
+                    }, {
+                        "targets": [3],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [4],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [5],
+                        "orderable": false,
+                        "searchable": false
+                    }
+                ],
+                "columns": [
+                    { "data": "SmtpProviderId", "name": "SmtpProviderId", "autoWidth": true },
+                    { "data": "Name", "name": "Name", "autoWidth": true },
+                    { "data": "Host", "name": "Host", "autoWidth": true },
+                    { "data": "Port", "name": "Port", "autoWidth": true },
+                    { "data": "SslProtocol", "name": "SslProtocol", "autoWidth": true },
+                    { "data": "TlSProtocol", "name": "TlSProtocol", "autoWidth": true },
+                    { "data": "Username", "name": "Username", "autoWidth": true },
+                    { "data": "IsDefault", "name": "IsDefault", "autoWidth": true },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return '<a class="btn btn-primary" href="/Administration/ApplicationSetting/Edit/' + full.SmtpProviderId + '"> Edit</a>';
+                        }
+                    },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return ' <button type="button" class="btn btn-info" onclick="SetDefault(' + full.SmtpProviderId + ');"> Set </button>';
+                        }
+                    },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return ' <button type="button" class="btn btn-success" onclick="TestConnection(' + full.SmtpProviderId + ');"> Test </button>';
+                        }
+                    }
+                ]
+            });
+
+
+
+        });
+
+        function Delete(categoryId) {
+            $.confirm({
+                title: 'Delete!',
+                content: 'Do you want to Delete Menu Category!',
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            url: "/Administration/ApplicationSetting/DeleteCategory",
+                            type: "POST",
+                            data: { categoryId: categoryId },
+                            success: function (data, textStatus, xhr) {
+                                if (data.Result == "success") {
+                                    location.reload();
+                                }
+                                if (data.Result == "failed") {
+                                    $.alert('Something Went Wrong');
+                                }
+                            },
+                            error: function (xhr, status, err) {
+                                if (xhr.status == 401) {
+                                    alert('Error');
+                                    window.location.href = "/Portal/Logout";
+                                }
+                                if (xhr.status == 500) {
+                                    alert('Error');
+                                    window.location.href = "/Portal/Logout";
+                                }
+                            }
+                        });
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                }
+            });
+        }
+
+
+        function SetDefault(value) {
+            $.ajax({
+                type: "POST", //HTTP POST Method
+                url: "/Administration/ApplicationSetting/SetDefaultConnection",
+                data: { SmtpProviderId: value },
+                success: function (data) {
+                    if (data.status == "Success") {
+                        alert('Default Connection is Updated Successfully');
+                        location.reload();
+                    }
+                    else {
+                        alert('Error Occured while Setting Default Connection');
+                    }
+
+                }
+            });
+        }
+
+        function TestConnection(value) {
+            $.ajax({
+                type: "POST", //HTTP POST Method
+                url: "/Administration/ApplicationSetting/TestConnection",
+                data: { SmtpProviderId: value },
+                success: function (data) {
+                    if (data.status == "Success") {
+                        alert('Connection Working Properly');
+                        location.reload();
+                    }
+                    else {
+                        alert('Testing Failed. Check Email Settings');
+                    }
+                }
+            });
+        }
+    </script>
+
+
+}
+

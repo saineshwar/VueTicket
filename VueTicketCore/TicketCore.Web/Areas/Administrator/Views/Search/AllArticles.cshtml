@@ -1,0 +1,28 @@
+﻿@using TicketCore.Web.Resources
+@model List<TicketCore.ViewModels.Knowledgebase.AllKnowledgebaseViewModel>
+@inject LocalizationService LocalizationService
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">@LocalizationService.GetLocalizedHtmlString("KnowledgebaseCategories")</h3>
+    </div>
+    <div class="card-body register-card-body">
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+
+                @foreach (var tempcategory in Model)
+                {
+                    <div class="col-md-4">
+                        <i class="fa fa-folder" style="font-size: 20px; color:#ffd700"></i> <a href="/User/Search/Article?departmentId=@tempcategory.DepartmentId">@tempcategory.DepartmentName </a> (@tempcategory.KnowledgebaseCount)
+                        <br />
+                        <i class="fa fa-arrow-right" style="font-size: 10px; color: crimson"> </i>  @tempcategory.DepartmentDescription
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+
+    </div>
+</div>
+

@@ -1,0 +1,117 @@
+﻿
+@using Microsoft.AspNetCore.Http
+@using TicketCore.Common
+@using TicketCore.Web.Views.Shared.Components.SideMenu
+
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+    @if (!string.IsNullOrEmpty(Context.Session.GetString("Portal.RoleId")))
+    {
+        if (Context.Session.GetInt32("Portal.RoleId") == (int)StatusMain.Roles.User)
+        {
+            <a href="/User/Dashboard/Dashboard" class="brand-link">
+                <img src="~/img/letterv.png" alt="Frapper Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light">VueTicket's</span>
+            </a>
+        }
+
+        if (Context.Session.GetInt32("Portal.RoleId") == (int)StatusMain.Roles.Agent)
+        {
+            <a href="/User/MyDashboard/Dashboard" class="brand-link">
+                <img src="~/img/letterv.png" alt="Frapper Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light">VueTicket's</span>
+            </a>
+        }
+
+        if (Context.Session.GetInt32("Portal.RoleId") == (int)StatusMain.Roles.AgentManager)
+        {
+
+            <a href="/AgentManager/MyDashboard/Dashboard" class="brand-link">
+                <img src="~/img/letterv.png" alt="Frapper Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light">VueTicket's</span>
+            </a>
+        }
+
+        if (Context.Session.GetInt32("Portal.RoleId") == (int)StatusMain.Roles.Administrator)
+        {
+
+            <a href="/Administrator/MyDashboard/Dashboard" class="brand-link">
+                <img src="~/img/letterv.png" alt="Frapper Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light">VueTicket's</span>
+            </a>
+        }
+
+        if (Context.Session.GetInt32("Portal.RoleId") == (int)StatusMain.Roles.SuperAdmin)
+        {
+
+            <a href="/Administration/Dashboard/Dashboard" class="brand-link">
+                <img src="~/img/letterv.png" alt="Frapper Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light">VueTicket's</span>
+            </a>
+        }
+
+
+    }
+<div class="sidebar">
+    @if (Context.Session.GetInt32("Portal.RoleId") == (int)StatusMain.Roles.User || Context.Session.GetInt32("Portal.RoleId") == (int)StatusMain.Roles.Agent)
+    {
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+            <img id="myprofile_pic" src="/img/user.png" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+            <a href="/User/MyAccount/Profile" class="d-block">Hi, @Context.Session.GetString("Portal.UserName") </a>
+        </div>
+    </div>
+    }
+    else if (Context.Session.GetInt32("Portal.RoleId") == (int)StatusMain.Roles.AgentManager)
+    {
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img id="myprofile_pic" src="/img/user.png" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="/AgentManager/MyAccount/Profile" class="d-block">Hi, @Context.Session.GetString("Portal.UserName") </a>
+            </div>
+        </div>
+    }
+    else if (Context.Session.GetInt32("Portal.RoleId") == (int)StatusMain.Roles.Administrator)
+    {
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img id="myprofile_pic" src="/img/user.png" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="/Administrator/MyAccount/Profile" class="d-block">Hi, @Context.Session.GetString("Portal.UserName") </a>
+            </div>
+        </div>
+    }
+    else if (Context.Session.GetInt32("Portal.RoleId") == (int)StatusMain.Roles.SuperAdmin)
+    {
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img id="myprofile_pic" src="/img/user.png" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="/Administration/MyAccount/Profile" class="d-block">Hi, @Context.Session.GetString("Portal.UserName") </a>
+            </div>
+        </div>
+    }
+    else
+        {
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="info">
+            <a href="#" class="d-block">Hi, Visitor</a>
+        </div>
+    </div>
+    }
+
+
+    @(await Component.InvokeAsync<SideMenuViewComponent>())
+</div>
+</aside>

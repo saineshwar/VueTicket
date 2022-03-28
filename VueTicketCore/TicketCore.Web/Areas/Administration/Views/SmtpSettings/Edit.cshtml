@@ -1,0 +1,87 @@
+﻿@model TicketCore.ViewModels.SmtpEmailSettings.SmtpEmailSettingsViewModel
+@{
+    ViewBag.PageName = "SMTP Configuration";
+}
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Edit</h3>
+        </div>
+        <form autocomplete="off" asp-controller="SmtpSettings" asp-antiforgery="true" asp-action="Edit" method="post">
+            <div class="card-body register-card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="Host"></label>
+                        <input asp-for="Host" maxlength="50" placeholder="Enter Host" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Host"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="Port"></label>
+                        <input asp-for="Port" maxlength="6" placeholder="Enter Port" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Port"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="Timeout"></label>
+                        <input asp-for="Timeout" maxlength="10" placeholder="Enter Timeout" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Timeout"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="MailSender"></label>
+                        <input asp-for="MailSender" maxlength="50" placeholder="Enter Sender Email" class="form-control" />
+                        <span class="text-danger" asp-validation-for="MailSender"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="SslProtocol"></label>
+                        <br />
+                        <input asp-for="SslProtocol" type="radio" value="Y" /><label>Yes</label>
+                        <input asp-for="SslProtocol" type="radio" value="N" /><label>No</label>
+                        <br />
+                        <span class="text-danger" asp-validation-for="SslProtocol"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="TlSProtocol"></label>
+                        <br />
+                        <input asp-for="TlSProtocol" type="radio" value="Y" /><label>Yes</label>
+                        <input asp-for="TlSProtocol" type="radio" value="N" /><label>No</label>
+                        <br />
+                        <span class="text-danger" asp-validation-for="TlSProtocol"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="Name"></label>
+                        <input asp-for="Name" maxlength="50" placeholder="Enter Name" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Name"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="Username"></label>
+                        <input asp-for="Username" maxlength="50" placeholder="Enter Username" autocomplete="new-password" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Username"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="Password"></label>
+                        <input asp-for="Password" maxlength="50" type="password" autocomplete="new-password" placeholder="Enter Password" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Password"></span>
+                    </div>
+                    <input asp-for="SmtpProviderId" type="hidden" />
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="EmailTo"></label>
+                        <input asp-for="EmailTo" maxlength="50" placeholder="Enter Email to Send Test Mail" class="form-control" />
+                        <span class="text-danger" asp-validation-for="EmailTo"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" id="btnsubmit" class="btn btn-success">Save</button>
+                <a asp-area="Administration" class="btn btn-danger" asp-controller="SmtpSettings" asp-action="Create">Create</a>
+                <a asp-area="Administration" class="btn btn-primary" asp-controller="SmtpSettings" asp-action="Index">List</a>
+            </div>
+        </form>
+    </div>
+</div>

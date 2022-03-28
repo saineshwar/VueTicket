@@ -1,0 +1,81 @@
+﻿@model TicketCore.ViewModels.SmtpEmailSettings.SmtpEmailSettingsViewModel
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Add</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form asp-controller="ApplicationSetting" asp-antiforgery="true" asp-action="SmtpSettings" method="post">
+
+            <div class="card-body register-card-body">
+                <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="Host"></label>
+                        <input asp-for="Host" placeholder="Enter Host Name" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Host"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="Port"></label>
+                        <input asp-for="Port" placeholder="Enter Port" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Port"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory"  asp-for="Timeout"></label>
+                        <input asp-for="Timeout" placeholder="Enter Timeout" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Timeout"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="mandatory"  asp-for="SslProtocol"></label>
+                        <input asp-for="SslProtocol" value="Y" type="radio" /> <label>Yes</label>
+                        <input asp-for="SslProtocol" value="N" type="radio" /> <label>No</label>
+                        <br />
+                        <span class="text-danger" asp-validation-for="SslProtocol"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="TlSProtocol"></label>
+                        <input asp-for="TlSProtocol" value="Y" type="radio"  /> <label>Yes</label>
+                        <input asp-for="TlSProtocol" value="N" type="radio"  /> <label>No</label>
+                        <br/>
+                        <span class="text-danger" asp-validation-for="TlSProtocol"></span>
+                    </div>
+                 
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="Name"></label>
+                        <input asp-for="Name" placeholder="Enter Name" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Name"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="Username"></label>
+                        <input asp-for="Username" placeholder="Enter Username" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Username"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="Password"></label>
+                        <input asp-for="Password" placeholder="Enter Password" type="password" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Password"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success">Save</button>
+                <a asp-area="Administration" class="btn btn-danger" asp-controller="ApplicationSetting" asp-action="SmtpSettings">Clear</a>
+                <a asp-area="Administration" class="btn btn-primary" asp-controller="ApplicationSetting" asp-action="Index">List</a>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    
+}

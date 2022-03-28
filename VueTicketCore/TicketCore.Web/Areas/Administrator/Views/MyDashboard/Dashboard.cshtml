@@ -1,0 +1,864 @@
+﻿@using TicketCore.Web.Resources
+@model TicketCore.ViewModels.Dashboard.UserDashboardViewModel
+@inject LocalizationService LocalizationService
+@{
+
+    ViewBag.PageName = @LocalizationService.GetLocalizedHtmlString("Dashboard");
+}
+
+
+
+
+<link href="~/plugins/chart.js/Chart.css" rel="stylesheet" />
+<script src="~/plugins/chart.js/Chart.min.js"></script>
+
+<div class="row">
+    <div class="col-md-6">
+        <select asp-for="DepartmentId" class="form-control"
+                asp-items="@(new SelectList(Model.ListofDepartments, "Value", "Text"))">
+        </select>
+        <hr />
+    </div>
+    <div class="col-md-6">
+        <form autocomplete="off" asp-controller="MyDashboard" asp-antiforgery="true" id="bugform" asp-action="Search" method="post">
+            <div class="form-row">
+                <div class="col-md-8">
+                    <input asp-for="TicketIdSearch" type="text" onkeypress="return onlyNumbers(event);" maxlength="6" placeholder="Enter TicketId to Search" class="form-control" />
+                    <span class="text-danger" asp-validation-for="TicketIdSearch"></span>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" id="btnsubmit" class="btn btn-default"> <i class="fas fa-search"></i> Search</button>
+                </div>
+            </div>
+        </form>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-default">
+            <div class="card-header">
+
+                <h3 class="card-title">
+                    <strong>
+
+                        @LocalizationService.GetLocalizedHtmlString("Status")
+                    </strong>
+                </h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+
+                </div>
+            </div>
+            <div class="card-body">
+
+
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="far fa-envelope-open"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Open</span>
+                                <span id="OpenSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fas fa-circle-notch"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">In-Progress</span>
+                                <span id="InProgressSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="far fa-folder-open"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Re-Opened</span>
+                                <span id="ReOpenedSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fas fa-check-circle"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Resolved</span>
+                                <span id="ResolvedSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fas fa-edit"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Recently Edited</span>
+                                <span id="RecentlyEditedSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fas fa-times-circle"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Closed</span>
+                                <span id="ClosedSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fas fa-pause-circle"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">On-Hold</span>
+                                <span id="OnHoldSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fas fa-times"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Deleted</span>
+                                <span id="OnDeletedSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fas fa-comment-dots"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Reply</span>
+                                <span id="OnReplySpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+
+                </div>
+
+                <hr />
+                <div class="row">
+
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fa fa-share" aria-hidden="true"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Escalation 1</span>
+                                <span id="EscalationStage1Span" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fa fa-share" aria-hidden="true"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Escalation 2</span>
+                                <span id="EscalationStage2Span" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                </div>
+                <hr />
+
+                <div class="row">
+
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fa fa-hourglass-start" aria-hidden="true"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">First Response Overdue</span>
+                                <span id="FirstResponseOverdueSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fa fa-hourglass-half" aria-hidden="true"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Every Response Overdue</span>
+                                <span id="EveryResponseOverdueSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fa fa-hourglass-end" aria-hidden="true"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Resolution Overdue</span>
+                                <span id="ResolutionOverdueSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-default">
+            <div class="card-header">
+
+                <h3 class="card-title">
+                    <strong>
+                        <i class="fa fa-star" style="color: gold" aria-hidden="true"></i>
+                        @LocalizationService.GetLocalizedHtmlString("StarTicketHunter")
+                    </strong>
+                </h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+
+                </div>
+            </div>
+            <div class="card-body">
+
+
+
+                <div id="loadstartperformer"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+
+
+    <div class="col-md-6">
+
+
+        <div class="card card-default card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <strong>
+                        @LocalizationService.GetLocalizedHtmlString("TicketStatus")
+                    </strong>
+                </h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+
+                </div>
+            </div>
+            <div id="Piecanvascontaniner" class="card-body">
+                <canvas id="Piecanvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <strong>
+                        @LocalizationService.GetLocalizedHtmlString("TicketPriority")
+                    </strong>
+                </h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+
+                </div>
+            </div>
+            <div id="PiePriorityCanvascontainer" class="card-body">
+                <canvas id="PiePriorityCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title"><strong>@LocalizationService.GetLocalizedHtmlString("MostResolvedTicket")</strong></h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="loadResolvedTicketData"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title"><strong>@LocalizationService.GetLocalizedHtmlString("MostOpenTicket")</strong></h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="loadOpenTicketData"></div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="row">
+    
+    <div class="col-md-12">
+        <div class="card card-default">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 class="card-title"><strong>@LocalizationService.GetLocalizedHtmlString("TicketVolumebyMonth")</strong></h3>
+                    </div>
+                    <div class="col-md-6">
+
+                    </div>
+                </div>
+            </div>
+            <div id="areaChartCanvascontainer" class="card-body">
+                <canvas id="areaChartCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="card card-default">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="card-title"><strong> @LocalizationService.GetLocalizedHtmlString("Tickets")</strong></h3>
+                    </div>
+                    <div class="col-md-12">
+
+                    </div>
+                </div>
+            </div>
+            <div id="barChartCanvascontainer" class="card-body">
+                <canvas id="barChartCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#loader").show();
+        bindCounts();
+        bindpiedata();
+        bindPiePriorityCharttdata();
+        bindBarCharttdata();
+        GetAgentsDetails();
+        GetStarAgentCount();
+        ResolvedCount();
+        OpenTicketCount();
+        areaTicketVolume();
+        $("#loader").hide();
+
+
+        $("#DepartmentId").change(function () {
+            if ($("#DepartmentId").val() == "") {
+                $.alert({
+                    title: 'Validation!',
+                    content: 'Please Choose Department.',
+                    type: 'red'
+                });
+            } else {
+                $("#loader").show();
+                bindCounts();
+                $("#loader").hide();
+            }
+        });
+
+    });
+
+
+    function bindCounts() {
+        var jsonObject =
+        {
+            DepartmentId: $("#DepartmentId").val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Administrator/MyDashboard/GetDepartmentWiseCount",
+            dataType: "json",
+            data: jsonObject,
+
+            success: function (data, textStatus, xhr) {
+                if (data.length != 0) {
+                    $("#OpenSpan").empty();
+                    $("#ResolvedSpan").empty();
+                    $("#InProgressSpan").empty();
+                    $("#OnHoldSpan").empty();
+                    $("#RecentlyEditedSpan").empty();
+                    $("#OnReplySpan").empty();
+                    $("#OnDeletedSpan").empty();
+                    $("#FirstResponseOverdueSpan").empty();
+                    $("#ResolutionOverdueSpan").empty();
+                    $("#EveryResponseOverdueSpan").empty();
+                    $("#EscalationStage1Span").empty();
+                    $("#EscalationStage2Span").empty();
+                    $("#ClosedSpan").empty();
+                    $("#ReOpenedSpan").empty();
+
+
+                    $("#OpenSpan").html(data[0].OpenCount);
+                    $("#ResolvedSpan").html(data[0].ResolvedCount);
+                    $("#InProgressSpan").html(data[0].InProgressCount);
+                    $("#OnHoldSpan").html(data[0].OnHoldCount);
+                    $("#RecentlyEditedSpan").html(data[0].RecentlyEditedCount);
+                    $("#OnReplySpan").html(data[0].RepliedCount);
+                    $("#OnDeletedSpan").html(data[0].DeletedCount);
+                    $("#FirstResponseOverdueSpan").html(data[0].FirstResponseOverdueCount);
+                    $("#ResolutionOverdueSpan").html(data[0].ResolutionOverdueCount);
+                    $("#EveryResponseOverdueSpan").html(data[0].EveryResponseOverdueCount);
+                    $("#EscalationStage1Span").html(data[0].Escalation1Count);
+                    $("#EscalationStage2Span").html(data[0].Escalation2Count);
+                    $("#ClosedSpan").html(data[0].ClosedCount);
+                    $("#ReOpenedSpan").html(data[0].ReOpenedCount);
+
+                }
+            },
+            error: function (xhr, status, err) {
+                if (xhr.status == 400) {
+                    DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                }
+            }
+        });
+
+
+    }
+
+    function bindpiedata() {
+        var jsonObject =
+        {
+            DepartmentId: $("#DepartmentId").val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Administrator/MyDashboard/GetPieChartData",
+            dataType: "json",
+            data: jsonObject,
+
+            success: function (data, textStatus, xhr) {
+                if (data.length != 0) {
+                    $('#Piecanvas').remove();
+                    $('#Piecanvascontaniner').append('<canvas id="Piecanvas"><canvas>');
+
+
+                    var ctx1 = document.getElementById("Piecanvas").getContext("2d");
+                    window.myBar = new Chart(ctx1,
+                        {
+                            type: 'pie',
+                            data: data,
+                            options:
+                            {
+                                title:
+                                {
+                                    display: true,
+                                    text: "Ticket Status"
+                                },
+                                responsive: true,
+                                maintainAspectRatio: true
+                            }
+                        });
+                }
+            },
+            error: function (xhr, status, err) {
+                if (xhr.status == 400) {
+                    DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                }
+            }
+        });
+
+    }
+
+    function bindPiePriorityCharttdata() {
+        var jsonObject =
+        {
+            DepartmentId: $("#DepartmentId").val()
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Administrator/MyDashboard/GetPriorityChartData",
+            dataType: "json",
+            data: jsonObject,
+            success: function (data, textStatus, xhr) {
+                if (data.length != 0) {
+                    $('#PiePriorityCanvas').remove();
+                    $('#PiePriorityCanvascontainer').append('<canvas id="PiePriorityCanvas"><canvas>');
+
+
+                    var ctx2 = document.getElementById("PiePriorityCanvas").getContext("2d");
+                    window.myBar = new Chart(ctx2,
+                        {
+                            type: 'doughnut',
+                            data: data,
+                            options:
+                            {
+                                title:
+                                {
+                                    display: true,
+                                    text: "Ticket Priority"
+                                },
+                                responsive: true,
+                                maintainAspectRatio: true
+                            }
+                        });
+                }
+            },
+            error: function (xhr, status, err) {
+                if (xhr.status == 400) {
+                    DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                }
+            }
+        });
+
+    }
+
+    function bindBarCharttdata() {
+        var jsonObject =
+        {
+            DepartmentId: $("#DepartmentId").val()
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Administrator/MyDashboard/GetBarChartData",
+            dataType: "json",
+            data: jsonObject,
+            success: function (data, textStatus, xhr) {
+                if (data.length != 0) {
+                    $('#barChartCanvas').remove();
+                    $('#barChartCanvascontainer').append('<canvas min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 487px; height="250" width="487" id="barChartCanvas"><canvas>');
+
+
+                    var ctx2 = document.getElementById("barChartCanvas").getContext("2d");
+
+
+                    var barChartData = $.extend(true, {}, data);
+                    var temp0 = data.datasets[0];
+                    var temp1 = data.datasets[1];
+                    barChartData.datasets[0] = temp1;
+                    barChartData.datasets[1] = temp0;
+
+                    var barChartOptions = {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        datasetFill: false,
+                        borderWidth: 1
+                    };
+
+                    window.myBar = new Chart(ctx2,
+                        {
+                            type: 'bar',
+                            data: barChartData,
+                            options: barChartOptions
+                        });
+
+
+
+                }
+            },
+            error: function (xhr, status, err) {
+                if (xhr.status == 400) {
+                    DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                }
+            }
+        });
+
+    }
+
+    function GetAgentsDetails() {
+        var jsonObject =
+        {
+            DepartmentId: $("#DepartmentId").val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Administrator/MyDashboard/GetAgentTeamTicketCount",
+            dataType: "html",
+            data: jsonObject,
+
+            success: function (data, textStatus, xhr) {
+                if (data.length != 0) {
+                    $("#loadTeamsStatusData").empty();
+                    $("#loadTeamsStatusData").html(data);
+                }
+            },
+            error: function (xhr, status, err) {
+                if (xhr.status == 400) {
+                    DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                }
+            }
+        });
+    }
+
+    function GetStarAgentCount() {
+        var jsonObject =
+        {
+            DepartmentId: $("#DepartmentId").val()
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Administrator/MyDashboard/GetStarAgentCount",
+            dataType: "html",
+            data: jsonObject,
+
+            success: function (data, textStatus, xhr) {
+                if (data.length != 0) {
+                    $("#loadstartperformer").empty();
+                    $("#loadstartperformer").html(data);
+                }
+            },
+            error: function (xhr, status, err) {
+                if (xhr.status == 400) {
+                    DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                }
+            }
+        });
+
+    }
+
+    function ResolvedCount() {
+        var jsonObject =
+        {
+            DepartmentId: $("#DepartmentId").val()
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Administrator/MyDashboard/GetResolvedTicketAgentWise",
+            dataType: "html",
+            data: jsonObject,
+
+            success: function (data, textStatus, xhr) {
+                if (data.length != 0) {
+                    $("#loadResolvedTicketData").empty();
+                    $("#loadResolvedTicketData").html(data);
+                }
+            },
+            error: function (xhr, status, err) {
+                if (xhr.status == 400) {
+                    DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                }
+            }
+        });
+    }
+
+    function OpenTicketCount() {
+        var jsonObject =
+        {
+            DepartmentId: $("#DepartmentId").val()
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Administrator/MyDashboard/GetOpenTicketAgentWise",
+            dataType: "html",
+            data: jsonObject,
+
+            success: function (data, textStatus, xhr) {
+                if (data.length != 0) {
+                    $("#loadOpenTicketData").empty();
+                    $("#loadOpenTicketData").html(data);
+                }
+            },
+            error: function (xhr, status, err) {
+                if (xhr.status == 400) {
+                    DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                }
+            }
+        });
+    }
+
+
+    function areaTicketVolume() {
+        var jsonObject =
+        {
+            DepartmentId: $("#DepartmentId").val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Administrator/MyDashboard/GetBarChartTicketVolumeData",
+            dataType: "json",
+            data: jsonObject,
+            success: function (data, textStatus, xhr) {
+                if (data.length != 0) {
+                    $('#areaChartCanvas').remove();
+                    $('#areaChartCanvascontainer').append('<canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 764px;" width="764" height="250" class="chartjs-render-monitor"></canvas>');
+
+
+                    var ctx2 = document.getElementById("areaChart").getContext("2d");
+
+                    var areaChartOptions = {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        legend: {
+                            display: false
+                        },
+                        scales: {
+                            xAxes: [{
+                                gridLines: {
+                                    display: false,
+                                }
+                            }],
+                            yAxes: [{
+                                gridLines: {
+                                    display: false,
+                                }
+                            }]
+                        }
+                    }
+
+                    // This will get the first returned node in the jQuery collection.
+                    window.myBar = new Chart(ctx2,
+                        {
+                            type: 'line',
+                            data: data,
+                            options: areaChartOptions
+                        });
+
+
+                }
+            },
+            error: function (xhr, status, err) {
+                if (xhr.status == 400) {
+                    DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                }
+            }
+        });
+
+
+
+
+
+
+
+    }
+
+    function DisplayModelStateErrors(modelState) {
+        var message = "";
+        var propStrings = Object.keys(modelState);
+
+        $.each(propStrings, function (i, propString) {
+            var propErrors = modelState[propString];
+            $.each(propErrors, function (j, propError) {
+                message += propError;
+            });
+            message += "\n";
+        });
+
+        alert(message);
+    };
+</script>

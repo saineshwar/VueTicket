@@ -1,0 +1,117 @@
+﻿@model TicketCore.ViewModels.LoginVM.ForgotPasswordViewModel
+@{ ViewData["Title"] = "ForgotPassword";
+    Layout = null; }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>VueTicket's | Forgot Password</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<body class="hold-transition login-page">
+
+    @if (TempData["ForgotPasswordMessage"] != null)
+    {
+        <div class="alert alert-success">
+            <strong>Message!</strong> @TempData["ForgotPasswordMessage"]
+        </div>
+
+    }
+
+    @if (TempData["ForgotPasswordErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            <strong>Message!</strong> @TempData["ForgotPasswordErrorMessage"]
+        </div>
+    }
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="~/img/letter-v-64.png" />
+
+        </div>
+        <div style="font-family: sans-serif;" class="login-logo">
+            <u>   <h3>VueTicket's</h3></u>
+        </div>
+
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">You forgot your password? Here you can easily retrieve a new password.</p>
+
+                <form id="account" asp-controller="ForgotPassword" asp-antiforgery="true" asp-action="Recover" method="post">
+                    <div class="input-group mb-3">
+                        <input asp-for="EmailId" autocomplete="new-password" maxlength="50" class="form-control" placeholder="EmailId" />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span asp-validation-for="EmailId" class="text-danger"></span>
+                    <div class="row">
+                        <div class="col-12">
+                            <dnt-captcha asp-captcha-generator-max="999999"
+                                         asp-captcha-generator-min="111111"
+                                         asp-captcha-generator-language="English"
+                                         asp-captcha-generator-display-mode="ShowDigits"
+                                         asp-use-relative-urls="true"
+                                         asp-placeholder="Enter Security code"
+                                         asp-validation-error-message="Please enter the security code."
+                                         asp-font-name="Tahoma"
+                                         asp-font-size="20"
+                                         asp-fore-color="#333333"
+                                         asp-back-color="#ccc"
+                                         asp-text-box-class="text-box form-control"
+                                         asp-text-box-template="<span class='input-group-prepend'><span class='form-group-text'></span></span>{0}"
+                                         asp-validation-message-class="text-danger"
+                                         asp-refresh-button-class="fas fa-redo btn-sm"
+                                         asp-use-noise="false" />
+
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="row" style="margin-top: 10px">
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block">Request new password</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
+
+                <p class="mt-3 mb-1">
+                    <a asp-controller="Portal" asp-action="Login">Login</a>
+                </p>
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/adminlte.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/jquery.unobtrusive-ajax.js"></script>
+
+</body>
+</html>
+
+

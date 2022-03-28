@@ -1,0 +1,191 @@
+﻿@{
+    ViewBag.PageName = "Agent"; 
+}
+@using TicketCore.Web.Resources
+@inject LocalizationService LocalizationService
+
+
+@await Html.PartialAsync("~/Views/Shared/_DatatablesCss.cshtml")
+
+
+<div class="col-md-12">
+    <div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title">@LocalizationService.GetLocalizedHtmlString("All")</h3>
+        </div>
+        <div class="card-body">
+            <table id="DatatablesUserMaster" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>UserId</th>
+                        <th>UserName</th>
+                        <th>FirstName</th>
+                        <th>LastName</th>
+                        <th>EmailId</th>
+                        <th>MobileNo</th>
+                        <th>Gender</th>
+                        <th>Role</th>
+                        <th>Department</th>
+                        <th>Status</th>
+                        <th>IsFirstLogin</th>
+                        <th>Edit</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Views/Shared/_DatatablesScripts.cshtml")
+
+@section scripts
+{
+
+    <script src="~/plugins/moment/moment.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#DatatablesUserMaster').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "order": [[0, "desc"]],
+                "filter": true,
+                "ajax": {
+                    "url": "/Administration/CreateAgent/GridAllAgentsUsers",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }, {
+                        "targets": [2],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [3],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [4],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [5],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [6],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [7],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [8],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [9],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [10],
+                        "orderable": false,
+                        "searchable": false
+                    },
+
+                    {
+                        "targets": [11],
+                        "orderable": false,
+                        "searchable": false
+                    },
+
+                    {
+                        "targets": [12],
+                        "orderable": false,
+                        "searchable": false
+                    }
+
+                ],
+                "columns": [
+                    { "data": "UserId", "name": "UserId", "autoWidth": true },
+                    { "data": "UserName", "name": "UserName", "autoWidth": true },
+                    { "data": "FirstName", "name": "FirstName", "autoWidth": true },
+                    { "data": "LastName", "name": "LastName", "autoWidth": true },
+                    { "data": "EmailId", "name": "EmailId", "autoWidth": true },
+                    { "data": "MobileNo", "name": "MobileNo", "autoWidth": true },
+                    { "data": "Gender", "name": "Gender", "autoWidth": true },
+                    { "data": "RoleName", "name": "RoleName", "autoWidth": true },
+                    { "data": "Department", "name": "Department", "autoWidth": true },
+                    { "data": "Status", "name": "Status", "autoWidth": true },
+                    { "data": "IsFirstLogin", "name": "IsFirstLogin", "autoWidth": true },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return '<a class="btn btn-primary" href="/Administration/CreateAgent/Edit/' + full.UserId + '"> Edit</a>';
+                        }
+                    },
+                    {
+                        "render": function (data, type, full, meta) {
+                            if (full.Status == "Active") {
+                                return '<button type="button" class="btn btn-success" onclick="Delete(' + full.UserId + ',' + false + ');">  Active  </button>';
+                            }
+                            if (full.Status == "InActive") {
+                                return '<button type="button" class="btn btn-danger" onclick="Delete(' + full.UserId + ',' + true + ');">  InActive </button>';
+                            }
+                        }
+                    }
+                ]
+            });
+        });
+
+        function Delete(userId, status) {
+            $.confirm({
+                title: 'Change Status!',
+                content: 'Do you want to Change Status!',
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            url: "/Administration/User/ChangeUserStatus",
+                            type: "POST",
+                            data: { UserId: userId, Status: status },
+                            success: function (data, textStatus, xhr) {
+                                if (data.Result == "success") {
+                                    location.reload();
+                                }
+                                if (data.Result == "failed") {
+                                    $.alert('Something Went Wrong');
+                                }
+                            },
+                            error: function (xhr, status, err) {
+                                if (xhr.status == 401) {
+                                    alert('Error');
+                                    window.location.href = "/Portal/Logout";
+                                }
+                                if (xhr.status == 500) {
+                                    alert('Error');
+                                    window.location.href = "/Portal/Logout";
+                                }
+                            }
+                        });
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                }
+            });
+        }</script>
+
+
+}

@@ -1,0 +1,63 @@
+﻿@model List<TicketCore.ViewModels.Dashboard.DisplayTicketReportCount>
+
+<table class="table table-bordered">
+    <thead>
+        <tr style="font-size: 13px;">
+            <th>Names</th>
+            <th>Open</th>
+            <th>Resolved</th>
+            <th>InProgress</th>
+            <th>OnHold</th>
+            <th>Recently Edited</th>
+            <th>Replied</th>
+            <th>Deleted</th>
+            <th>First Response Overdue</th>
+            <th>Resolution Overdue</th>
+            <th>Every Response Overdue</th>
+            <th>Escalation Stage 1</th>
+            <th>Escalation Stage 2</th>
+            <th>Closed</th>
+            <th>ReOpened</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            @foreach (var data in Model)
+            {
+        <tr>
+            <td>
+                <button type="button" class="btn btn-block btn-outline-primary btn-flat text-left btn-sm"> <i class="fas fa-user"></i> @data.Names</button>
+            </td>
+         
+            <td>@data.Open</td>
+            <td>@data.Resolved</td>
+            <td>@data.InProgress</td>
+            <td>@data.OnHold</td>
+            <td>@data.RecentlyEditedValue</td>
+            <td>@data.Replied</td>
+            <td>@data.Deleted</td>
+            <td>@data.FirstResponseOverdue</td>
+            <td>@data.ResolutionOverdue</td>
+            <td>@data.EveryResponseOverdue</td>
+            <td>@data.EscalationStage1</td>
+            <td>@data.EscalationStage2</td>
+            <td>@data.Closed</td>
+            <td>@data.ReOpened</td>
+            <td>@data.Total</td>
+        </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td>
+                    <i class="far fa-smile"></i>  No Bugs to Display.
+                </td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>

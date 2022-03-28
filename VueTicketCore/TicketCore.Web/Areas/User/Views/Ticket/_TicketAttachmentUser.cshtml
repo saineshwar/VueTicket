@@ -1,0 +1,27 @@
+﻿@using TicketCore.Web.Resources
+@model TicketCore.ViewModels.Tickets.DisplayTicketViewModel
+@inject LocalizationService LocalizationService
+
+
+@if (Model != null)
+{
+    if (Model.ListofAttachments.Any())
+    {
+        foreach (var data in Model.ListofAttachments)
+        {
+            <p>
+                <a data-toggle="tooltip"
+                   data-placement="top"
+                   title="Download"
+                   class="link-black text-md"
+                   onclick="downloadAttachment('@data.TicketId', '@data.AttachmentId')" href="javascript:void(0);"><i class="fa fa-paperclip mr-1"></i> @data.OriginalAttachmentName</a>
+
+
+            </p>
+        }
+    }
+    else
+    {
+        <p> @LocalizationService.GetLocalizedHtmlString("NoAttachments") </p>
+    }
+}

@@ -1,0 +1,68 @@
+﻿@model TicketCore.ViewModels.SmtpEmailSettings.GeneralSettingsViewModel
+@{
+    ViewBag.PageName = "General Settings";
+}
+<div class="col-md-12">
+    <form asp-controller="ApplicationSetting" asp-antiforgery="true" asp-action="General" method="post">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Add</h3>
+            </div> 
+
+            <div class="card-body register-card-body">
+                <input type="hidden" asp-for="GeneralSettingsId" />
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="Name"></label>
+                        <input asp-for="Name" placeholder="Enter Name" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Name"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="Email"></label>
+                        <input asp-for="Email" placeholder="Enter Email" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Email"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="SupportEmailId"></label>
+                        <input asp-for="SupportEmailId" placeholder="Enter Support EmailId" class="form-control" />
+                        <span class="text-danger" asp-validation-for="SupportEmailId"></span>
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="WebsiteTitle"></label>
+                        <input asp-for="WebsiteTitle" placeholder="Enter WebsiteTitle" class="form-control" />
+                        <span class="text-danger" asp-validation-for="WebsiteTitle"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="WebsiteUrl"></label>
+                        <input asp-for="WebsiteUrl" placeholder="Enter WebsiteUrl" class="form-control" />
+                        <span class="text-danger" asp-validation-for="WebsiteUrl"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="EnableEmailFeature"></label>
+                        <input asp-for="EnableEmailFeature" type="checkbox" />
+                        <span class="text-danger" asp-validation-for="EnableEmailFeature"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="EnableSmsFeature"></label>
+                        <input asp-for="EnableSmsFeature" type="checkbox" />
+                        <span class="text-danger" asp-validation-for="EnableSmsFeature"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory"  asp-for="EnableSignatureFeature"></label>
+                        <input asp-for="EnableSignatureFeature" type="checkbox" />
+                        <span class="text-danger" asp-validation-for="EnableSignatureFeature"></span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success">Save</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,158 @@
+﻿@{
+    ViewBag.PageName = "Business Hours";
+}
+@using TicketCore.Web.Resources
+@inject LocalizationService LocalizationService
+
+@await Html.PartialAsync("~/Views/Shared/_DatatablesCss.cshtml")
+
+<div class="col-md-12">
+    <div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title">@LocalizationService.GetLocalizedHtmlString("All")</h3>
+        </div>
+        <div class="card-body">
+            <table id="CommonDataTable" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>BusinessHoursId</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>BusinessHours</th>
+                        <th>CreatedOn</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@await Html.PartialAsync("~/Views/Shared/_DatatablesScripts.cshtml")
+<script src="~/plugins/moment/moment.min.js"></script>
+@Html.Hidden("item-to-delete", "", new { @id = "item-to-delete" })
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#CommonDataTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                'order': [0, 'desc'],
+                "ajax": {
+                    "url": "/Administration/BusinessHours/GridAllBusinessHours",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }, {
+                        "targets": [2],
+                        "orderable": false,
+                        "searchable": false
+                    }, {
+                        "targets": [3],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [4],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [5],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [6],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [7],
+                        "orderable": false,
+                        "searchable": false
+                    }
+                ],
+                "columns": [
+                    { "data": "BusinessHoursId", "name": "BusinessHoursId", "autoWidth": true },
+                    { "data": "Name", "name": "Name", "autoWidth": true },
+                    { "data": "Description", "name": "Description", "autoWidth": true },
+                    { "data": "BusinessHoursName", "name": "BusinessHoursName", "autoWidth": true },
+
+                    {
+                        "render": function (data, type, full, meta) {
+                            return moment(full.CreatedOn).format("DD/MM/YYYY");
+                        }
+                    },
+                    { "data": "Status", "name": "Status", "autoWidth": true },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return '<a class="btn btn-primary" href="/Administration/BusinessHours/Details/' + full.BusinessHoursId + '"> Details</a>';
+
+                        }
+                    },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return ' <button type="button" class="btn btn-danger" onclick="Delete(' + full.BusinessHoursId + ');"> Deactivate </button>';
+                        }
+                    }
+                ]
+            });
+
+
+
+        });
+
+        function Delete(businessHoursId) {
+            $.confirm({
+                title: 'Deactivate!',
+                content: 'Do you want to Deactivate Business Hours!',
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            url: "/Administration/BusinessHours/Deactivate",
+                            type: "POST",
+                            data: { businessHoursId: businessHoursId },
+                            success: function (data, textStatus, xhr) {
+                                if (data.Result == "success") {
+                                    window.location.reload();
+                                }
+                                if (data.Result == "validation") {
+                                    $.alert(data.Message);
+                                }
+                                if (data.Result == "failed") {
+                                    $.alert(data.Message);
+                                }
+                            },
+                            error: function (xhr, status, err) {
+                                if (xhr.status == 401) {
+                                    alert('Error');
+                                    window.location.href = "/Portal/Logout";
+                                }
+                                if (xhr.status == 500) {
+                                    alert('Error');
+                                    window.location.href = "/Portal/Logout";
+                                }
+                            }
+                        });
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                }
+            });
+        }</script>
+
+
+}
+

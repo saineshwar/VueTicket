@@ -1,0 +1,392 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Web.Common
+@using TicketCore.Web.Resources
+@model TicketCore.ViewModels.Tickets.Grids.AdministratorTicketGrid
+@inject LocalizationService LocalizationService
+
+
+
+
+<form autocomplete="off" asp-controller="MyTicket" id="frmSearch" enctype="multipart/form-data" asp-action="AllTickets" method="get">
+
+    <div class="card card-secondary card-outline">
+        <div class="card-header">
+            <h3 class="card-title"> <i class="fas fa-filter"></i> All Assigned Ticket's</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+
+        <div class="card-body register-card-body">
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label class="mandatory" asp-for="DepartmentId"></label>
+                    <select asp-for="DepartmentId" class="form-control"
+                            asp-items="@(new SelectList(Model.ListofDepartment, "Value", "Text"))">
+                    </select>
+                    <span class="text-danger" asp-validation-for="DepartmentId"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="mandatory" asp-for="StatusId"></label>
+                    <select asp-for="StatusId" class="form-control"
+                            asp-items="@(new SelectList(Model.ListofStatus, "Value", "Text"))">
+                    </select>
+                    <span class="text-danger" asp-validation-for="StatusId"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="mandatory" asp-for="PriorityId"></label>
+                    <select asp-for="PriorityId" class="form-control"
+                            asp-items="@(new SelectList(Model.ListofPriority, "Value", "Text"))">
+                    </select>
+                    <span class="text-danger" asp-validation-for="PriorityId"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="mandatory" asp-for="AgentsId"></label>
+                    <select asp-for="AgentsId" class="form-control"
+                            asp-items="@(new SelectList(Model.ListofAgents, "Value", "Text"))">
+                    </select>
+                    <span class="text-danger" asp-validation-for="AgentsId"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="mandatory" asp-for="SearchIn"></label>
+                    <select asp-for="SearchIn" class="form-control"
+                            asp-items="@(new SelectList(Model.ListofSearch, "Value", "Text"))">
+                    </select>
+                    <span class="text-danger" asp-validation-for="SearchIn"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="mandatory" asp-for="Search"></label>
+                    <input asp-for="Search" placeholder="Enter Search" class="form-control" />
+                    <span class="text-danger" asp-validation-for="Search"></span>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="card-footer">
+            <input id="btnsubmit" class="btn btn-success" type="submit" value="Search" />
+            <input id="btnclear" class="btn btn-primary" type="button" value="Clear" />
+        </div>
+    </div>
+    <div class="card  card-outline">
+
+        <div class="card-body register-card-body">
+
+            @ViewBag.totalticketCount @LocalizationService.GetLocalizedHtmlString("TicketFound")
+            <hr />
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+
+                        <th>@LocalizationService.GetLocalizedHtmlString("TicketId")</th>
+                        <th>@LocalizationService.GetLocalizedHtmlString("TrackingId")</th>
+                        <th>@LocalizationService.GetLocalizedHtmlString("Department")</th>
+                        <th>@LocalizationService.GetLocalizedHtmlString("Name")</th>
+                        <th>@LocalizationService.GetLocalizedHtmlString("Subject")</th>
+                        <th>@LocalizationService.GetLocalizedHtmlString("Priority")</th>
+                        <th>@LocalizationService.GetLocalizedHtmlString("Status")</th>
+                        <th>@LocalizationService.GetLocalizedHtmlString("Agent")</th>
+                        <th>@LocalizationService.GetLocalizedHtmlString("TicketUpdatedDate")</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @if (Model.ListofTicketDetails.Any())
+                    {
+                        @foreach (var ticket in Model.ListofTicketDetails)
+                        {
+                            <tr>
+
+                                <td>
+                                    <a asp-area="Administrator" class="btn btn-outline-dark" asp-controller="MyTicketDetails" asp-action="TicketDetails" asp-route-id="@ticket.TicketId">#@ticket.TicketId</a>
+                                </td>
+                                <td>
+                                    @ticket.TrackingId
+
+                                    <br />
+                                    @if (!string.IsNullOrEmpty(ticket.StatusInfo))
+                                    {
+                                        <button type="button" class="btn btn-outline-danger btn-xs"><i class="fa fa-bell"></i>   @ticket.StatusInfo</button>
+                                    }
+                                </td>
+                                <td>
+                                    @ticket.DepartmentName
+                                </td>
+                                <td>
+                                    @ticket.Name
+                                </td>
+                                <td class="textmerge">
+                                    @ticket.Subject
+                                </td>
+                                <td>
+                                    @if (ticket.Priority == "Urgent")
+                                    {
+                                        <button type="button" class="btn btn-Urgent btn-sm">@ticket.Priority</button>
+
+                                    }
+                                    else if (ticket.Priority == "High")
+                                    {
+                                        <button type="button" class="btn btn-High btn-sm">@ticket.Priority</button>
+
+                                    }
+                                    else if (ticket.Priority == "Medium")
+                                    {
+                                        <button type="button" class="btn btn-Medium btn-sm">@ticket.Priority</button>
+
+                                    }
+                                    else if (ticket.Priority == "Low")
+                                    {
+                                        <button type="button" class="btn btn-Low btn-sm">@ticket.Priority</button>
+                                    }
+                                </td>
+                                <td>
+                                    @if (ticket.StatusId == 1)
+                                    {
+                                        <button type="button" class="btn btn-Newx btn-sm">@ticket.Status</button>
+                                    }
+                                    else if (ticket.StatusId == 2)
+                                    {
+                                        <button type="button" class="btn btn-Resolvedx btn-sm">@ticket.Status</button>
+                                    }
+                                    else if (ticket.StatusId == 3)
+                                    {
+                                        <button type="button" class="btn btn-InProgressx btn-sm">@ticket.Status</button>
+                                    }
+                                    else if (ticket.StatusId == 4)
+                                    {
+                                        <button type="button" class="btn btn-OnHoldx btn-sm">@ticket.Status</button>
+                                    }
+                                    else if (ticket.StatusId == 5)
+                                    {
+                                        <button type="button" class="btn btn-Resolvedx btn-sm">@ticket.Status</button>
+                                    }
+                                    else if (ticket.StatusId == 6)
+                                    {
+                                        <button type="button" class="btn btn-Replyx btn-sm">@ticket.Status</button>
+                                    }
+                                    else if (ticket.StatusId == 7)
+                                    {
+                                        <button type="button" class="btn btn-deletedx  btn-sm">@ticket.Status</button>
+                                    }
+                                    else if (ticket.StatusId == 8)
+                                    {
+                                        <button type="button" class="btn btn-Overduex btn-sm">@ticket.Status</button>
+                                    }
+                                    else if (ticket.StatusId == 9)
+                                    {
+                                        <button type="button" class="btn btn-Overduex btn-sm">@ticket.Status</button>
+                                    }
+                                    else if (ticket.StatusId == 10)
+                                    {
+                                        <button type="button" class="btn btn-Overduex btn-sm">@ticket.Status</button>
+                                    }
+                                    else if (ticket.StatusId == 11)
+                                    {
+                                        <button type="button" class="btn btn-darktpurpletimex btn-sm">@ticket.Status</button>
+                                    }
+                                    else if (ticket.StatusId == 12)
+                                    {
+                                        <button type="button" class="btn btn-darktpurpletimex btn-sm">@ticket.Status</button>
+                                    }
+                                    else if (ticket.StatusId == 13)
+                                    {
+                                        <button type="button" class="btn btn-Closedx btn-sm">@ticket.Status</button>
+                                    }
+                                    else if (ticket.StatusId == 14)
+                                    {
+                                        <button type="button" class="btn btn-ReOpenedx btn-sm">@ticket.Status</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-success btn-sm">@ticket.Status</button>
+                                    }
+
+                                    @if (ticket.DeleteStatus == true)
+                                    {
+                                        <button type="button" class="btn btn-deletedx btn-sm">Deleted</button>
+                                    }
+
+                                    @if (ticket.EscalationStage2Status == true)
+                                    {
+                                        <button type="button" class="btn btn-Overdue btn-sm">EscalationStage2</button>
+
+                                    }
+                                    @if (ticket.EscalationStage1Status == true)
+                                    {
+                                        <button type="button" class="btn btn-Overdue btn-sm">EscalationStage1</button>
+                                    }
+                                    @if (ticket.FirstResponseStatus == true)
+                                    {
+                                        <button type="button" class="btn btn-Overdue btn-sm">Overdue</button>
+                                    }
+                                    @if (ticket.ResolutionStatus == true)
+                                    {
+                                        <button type="button" class="btn btn-Overdue btn-sm">Overdue</button>
+                                    }
+                                    @if (ticket.EveryResponseStatus == true)
+                                    {
+                                        <button type="button" class="btn btn-Overdue btn-sm">Overdue</button>
+                                    }
+                                </td>
+                                <td>
+                                    @ticket.AgentName
+                                </td>
+                                <td>
+                                    @if (ticket.TicketUpdatedDate != null)
+                                    {
+                                        @ticket.TicketUpdatedDate
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-success btn-sm">Not Assigned</button>
+                                    }
+                                </td>
+
+
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="8">
+                                @Html.PagedListPager((IPagedList)Model.ListofTicketDetails,
+                                    page => Url.Action("AllTickets", new
+                                    {
+                                        page = page,
+                                        statusId = Model.StatusId,
+                                        DepartmentId = Model.DepartmentId,
+                                        PriorityId = Model.PriorityId,
+                                        search = Model.Search,
+                                        searchIn = Model.SearchIn,
+                                        agentsId = Model.AgentsId
+                                    })
+                                    , new PagedListRenderOptions
+                                    {
+                                        LiElementClasses = new string[] { "page-item" },
+                                        PageClasses = new string[] { "page-link" },
+                                        Display = PagedListDisplayMode.Always
+
+                                    })
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7">
+                                <i class="far fa-smile"></i> No Ticket's to Display.
+                            </td>
+                        </tr>
+                    }
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+
+
+            $("#btnclear").click(function() {
+                $.confirm({
+                    title: 'Confirmation!',
+                    type: 'green',
+                    content: 'Do you want to Clear Filters?',
+                    buttons: {
+                        confirm: function() {
+                            window.location = '/Administrator/MyTicket/AllTickets';
+                        },
+                        cancel: function() {
+                            $.alert('Canceled!');
+                        }
+                    }
+                });
+            });
+
+
+            $("#DepartmentId").change(function() {
+                $("#loader").show();
+                bindagent();
+                $("#loader").hide();
+            });
+
+
+            if ('@Model.AgentsId' !='' )
+            {
+                $.ajax({
+                    type: "POST",
+                    url: "/Administrator/MyTicket/GetAgentList",
+                    data: { DepartmentId: '@Model.DepartmentId' },
+                    dataType: "json",
+                    success: function (data, textStatus, xhr)
+                    {
+                        $("#AgentsId").empty();
+                        $.each(data.listofusers,
+                            function (i) {
+                                var optionhtml = '<option value="' + data.listofusers[i].Value + '">' + data.listofusers[i].Text + '</option>';
+                                $("#AgentsId").append(optionhtml);
+                            });
+
+                        $("#AgentsId").val('@Model.AgentsId');
+                    },
+                    error: function(xhr, status, err)
+                    {
+                        if (xhr.status == 401)
+                        {
+                            alert('Error');
+                            window.location.href = "/Portal/Logout";
+                        }
+
+                        if (xhr.status == 500)
+                        {
+                            alert('Error');
+                            window.location.href = "/Portal/Logout";
+                        }
+                    }
+                });
+
+
+
+            };
+
+        });
+
+        function bindagent() {
+            $.ajax({
+                type: "POST",
+                url: "/Administrator/MyTicket/GetAgentList",
+                data: { DepartmentId: $("#DepartmentId").val() },
+                dataType: "json",
+                success: function (data, textStatus, xhr) {
+                    $("#AgentsId").empty();
+                    $.each(data.listofusers,
+                        function (i) {
+                            var optionhtml = '<option value="' + data.listofusers[i].Value + '">' + data.listofusers[i].Text + '</option>';
+                            $("#AgentsId").append(optionhtml);
+                        });
+
+                },
+                error: function (xhr, status, err) {
+                    if (xhr.status == 401) {
+                        alert('Error');
+                        window.location.href = "/Portal/Logout";
+                    }
+
+                    if (xhr.status == 500) {
+                        alert('Error');
+                        window.location.href = "/Portal/Logout";
+                    }
+                }
+            });
+        }
+
+    </script>
+}
+

@@ -1,0 +1,199 @@
+﻿
+.mandatory:after {
+    content: '*';
+    color: red;
+    padding-left: 2px;
+    font-size: 15px;
+    font-weight: normal;
+    top: -2px;
+    position: relative;
+}
+
+.form-control.input-validation-error {
+    border-color: #dc3545;
+    padding-right: calc(1.5em + 0.75rem);
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.textmerge {
+    width: 25%;
+    word-break: break-all;
+}
+
+
+.btn-Urgent {
+    color: black;
+    font-family: system-ui;
+    background-color: #ff7b7b;
+    border-color: #000000;
+}
+
+.btn-High {
+    /*color: #fff;*/
+    background-color: #ffd7b5;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-Medium {
+    /*color: #fff;*/
+    background-color: #ffe248b3;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-Low {
+    /*color: #fff;*/
+    background-color: #cceaff;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+
+.btn-Newx {
+    /*color: #fff;*/
+    background-color: #99ccff;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-Confirmedx {
+    /*color: #fff;*/
+    background-color: #C9AAFA;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-InProgressx {
+    /*color: #fff;  #FC325D*/
+    background-color: #f96987;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-lightredx {
+    /*color: #fff;*/
+    background-color: #ff7b7b;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-InTestingx {
+    /*color: #fff;*/
+    background-color: #FDBC84;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-OnHoldx {
+    /*color: #fff;*/
+    background-color: #FFDF7D;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-Resolvedx {
+    /*color: #fff;*/
+    background-color: #83e7a8;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-Closedx {
+    /*color: #fff;*/
+    background-color: #9ccc34;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-lightcyanx {
+    /*color: #fff;*/
+    background-color: #86CEDA;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-lightgrayx {
+    /*color: #fff;*/
+    background-color: #adb6bd75;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-Replyx {
+    /*color: #fff;*/
+    background-color: #43e8d87d;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-Duplicatex {
+    /*color: #fff;*/
+    background-color: #C5D3E3;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-ReOpenedx {
+    /*color: #fff;*/
+    background-color: #ffdc73;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-UnConfirmedx {
+    /*color: #fff;*/
+    background-color: #FFE9D2;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-Overduex {
+    /*color: #fff;*/
+    background-color: lightsalmon;
+    border-color: #000000;
+}
+
+
+.btn-lightgreenglowx {
+    /*color: #fff;*/
+    background-color: #DFFF00;
+    border-color: #000000;
+}
+
+.btn-lightbluechatx {
+    /*color: #fff;*/
+    background-color: #cec9ff;
+    border-color: #000000;
+}
+
+.btn-darktbluechatx {
+    /*color: #fff;*/
+    background-color: #83aff0;
+    border-color: #000000;
+}
+
+.btn-darktpurpletimex {
+    /*color: #fff;*/
+    background-color: #5848b0;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-deletedx {
+    /*color: #fff;*/
+    background-color: #ff7b7b;
+    border-color: #000000;
+    font-family: system-ui;
+}
+
+.btn-Overdue {
+    color: black;
+    font-family: system-ui;
+    background-color: #ff7272;
+    border-color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}

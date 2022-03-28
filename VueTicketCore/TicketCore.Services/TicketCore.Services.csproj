@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.7.7.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TicketCore.Common\TicketCore.Common.csproj" />
+    <ProjectReference Include="..\TicketCore.Data\TicketCore.Data.csproj" />
+    <ProjectReference Include="..\TicketCore.Models\TicketCore.Models.csproj" />
+    <ProjectReference Include="..\TicketCore.ViewModels\TicketCore.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

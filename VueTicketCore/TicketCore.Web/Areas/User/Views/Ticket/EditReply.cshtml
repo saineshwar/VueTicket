@@ -1,0 +1,199 @@
+﻿
+@using TicketCore.Web.Helpers
+@using TicketCore.Web.Resources
+@model TicketCore.ViewModels.Tickets.EditTicketReplyViewModel
+@inject LocalizationService LocalizationService
+@{
+    Layout = "_LayoutAgent";
+}
+<form autocomplete="off" asp-controller="Ticket" asp-antiforgery="true" id="ticketform" enctype="multipart/form-data" asp-action="EditReply" method="post">
+    <div class="col-md-12">
+        <div class="card card-cyan card-outline">
+            <div class="card-header">
+                <h3 class="card-title">@LocalizationService.GetLocalizedHtmlString("EditTicketReply")</h3>
+            </div>
+            <div class="card-body register-card-body">
+                <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                <input asp-for="TicketReplyId" type="hidden" />
+                <input asp-for="TicketId" type="hidden" />
+                <input asp-for="TicketReplyDetailsId" type="hidden" />
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="mandatory" asp-for="Message"></label>
+                        <textarea asp-for="Message" placeholder="Description" class="form-control" required="required"></textarea>
+                        <span class="text-danger" asp-validation-for="Message"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <input name="file1" id="file1" onchange="ValidateDocumentFile(this);" type="file" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input name="file2" id="file2" onchange="ValidateDocumentFile(this);" type="file" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input name="file3" id="file3" onchange="ValidateDocumentFile(this);" type="file" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <button type="button" id="btnsubmit" class="btn btn-success"> <i class="fas fa-check-circle"></i> Submit</button>
+
+                @if ((int)ViewBag.Currentrole == (int)RolesHelper.Roles.Agent)
+                {
+                    <a asp-area="User" class="btn btn-primary" asp-controller="Ticket" asp-action="AllTickets"><i class="fas fa-ban"></i> Cancel</a>
+                }
+                else
+                {
+                    <a asp-area="User" class="btn btn-primary" asp-controller="Ticket" asp-action="AllTickets"><i class="fas fa-ban"></i> Cancel</a>
+                }
+            </div>
+        </div>
+
+        <div class="card card-cyan card-outline">
+            <div class="card-header">
+                <h3 class="card-title">@LocalizationService.GetLocalizedHtmlString("TicketAttachment")</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <div class="card-body register-card-body">
+                @if (Model.ListofAttachments != null)
+                {
+                    @if (Model.ListofAttachments.Any())
+                    {
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>@LocalizationService.GetLocalizedHtmlString("Attachment")</th>
+                                            <th>@LocalizationService.GetLocalizedHtmlString("Download")</th>
+                                            <th>@LocalizationService.GetLocalizedHtmlString("Action")</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var attachment in Model.ListofAttachments)
+                                        {
+                                            <tr>
+                                                <td>@attachment.OriginalAttachmentName</td>
+                                                <td>
+                                                    <a class="btn btn-primary"
+                                                       data-toggle="tooltip" data-placement="top"
+                                                       title="Download Attachment !" onclick="downloadAttachment('@Model.TicketId', '@attachment.ReplyAttachmentId')" href="javascript:void(0);"> <i class="fa fa-download"></i> @LocalizationService.GetLocalizedHtmlString("Download") </a>
+
+                                                </td>
+                                                <td>
+                                                    <a data-toggle="tooltip"
+                                                       data-placement="top"
+                                                       title="Delete Attachment !"
+                                                       class="btn btn-danger" onclick="deleteAttachment('@attachment.ReplyAttachmentId', '@Model.TicketId')" href="javascript:void(0);"> <i class="fa fa-trash"></i> @LocalizationService.GetLocalizedHtmlString("Delete") </a>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p> @LocalizationService.GetLocalizedHtmlString("NoAttachments")</p>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="~/js/ckeditor/ckeditor.js"></script>
+<script asp-append-version="true" src="~/Scripts/custom/validate.file.js"></script>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        CKEDITOR.replace('Message', { htmlEncodeOutput: true });
+
+        $("#btnsubmit").click(function () {
+            if ($('#ticketform').valid()) {
+
+                var textboxData = CKEDITOR.instances.Message.getData();
+                if (textboxData === '') {
+                    $.alert({
+                        title: 'Validation!',
+                        content: 'Enter Ticket Message.',
+                        type: 'red'
+                    });
+                } else {
+                    $.confirm({
+                        title: 'Confirmation!',
+                        type: 'green',
+                        content: 'Do you want to Update Details ?',
+                        buttons: {
+                            confirm: function () {
+                                $("#loader").show();
+                                $('#ticketform').submit();
+                            },
+                            cancel: function () {
+                                $.alert('Canceled!');
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        function downloadAttachment(ticketId, attachmentsId) {
+            window.location = "/User/Ticket/DownloadReplyAttachment?ticketId=" + ticketId + "&attachmentId=" + attachmentsId;
+        }
+
+        function deleteAttachment(attachmentsId, ticketId) {
+            $.confirm({
+                title: 'Confirmation!',
+                type: 'red',
+                content: 'Do you want to Delete Attachment ?',
+                buttons: {
+                    confirm: function () {
+                        if (attachmentsId != "") {
+                            var jsonObject =
+                            {
+                                attachmentsId: attachmentsId,
+                                ticketId: ticketId
+                            };
+
+                            $.ajax({
+                                type: "POST",
+                                url: "/User/Ticket/DeleteReplyAttachment",
+                                dataType: "json",
+                                data: jsonObject,
+                                success: function (data, textStatus, xhr) {
+                                    if (data.Status === true) {
+                                        alert("Attachment Deleted Successfully");
+                                        location.reload();
+                                    } else {
+                                        alert("Something Went Wrong While Deleting Attachment Please Try Again after Sometime!");
+                                    }
+
+                                },
+                                error: function (xhr, status, err) {
+                                    if (xhr.status == 400) {
+                                        DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                }
+            });
+
+
+        }
+
+    </script>
+}

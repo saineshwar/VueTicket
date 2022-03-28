@@ -1,0 +1,375 @@
+﻿@using TicketCore.Web.Resources
+@model TicketCore.ViewModels.Dashboard.UserDashboardViewModel
+@{
+    ViewBag.PageName = @LocalizationService.GetLocalizedHtmlString("Dashboard");
+    Layout = "_LayoutUser";
+}
+@inject LocalizationService LocalizationService
+<link href="~/plugins/chart.js/Chart.css" rel="stylesheet" />
+<script src="~/plugins/chart.js/Chart.min.js"></script>
+<style>
+    .bg-black {
+        background-color: #008FCB;
+        color: #fff !important;
+    }
+</style>
+<div class="row">
+    <div class="col-md-6">
+        <select asp-for="DepartmentId" class="form-control"
+                asp-items="@(new SelectList(Model.ListofDepartments, "Value", "Text"))">
+        </select>
+        <hr />
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-default">
+            <div class="card-header">
+
+                <h3 class="card-title">
+                    <strong>
+                        @LocalizationService.GetLocalizedHtmlString("Status")
+                        
+                    </strong>
+                </h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+
+                </div>
+            </div>
+            <div class="card-body">
+
+
+
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="far fa-envelope-open"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Open</span>
+                                <span id="OpenSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fas fa-circle-notch"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">In-Progress</span>
+                                <span id="InProgressSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="far fa-folder-open"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Re-Opened</span>
+                                <span id="ReOpenedSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fas fa-check-circle"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Resolved</span>
+                                <span id="ResolvedSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fas fa-edit"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Recently Edited</span>
+                                <span id="RecentlyEditedSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fas fa-times-circle"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Closed</span>
+                                <span id="ClosedSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fas fa-pause-circle"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">On-Hold</span>
+                                <span id="OnHoldSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fas fa-times"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Deleted</span>
+                                <span id="OnDeletedSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fas fa-comment-dots"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Reply</span>
+                                <span id="OnReplySpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+
+                </div>
+
+                <hr />
+                <div class="row">
+
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fa fa-share" aria-hidden="true"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Escalation Stage 1</span>
+                                <span id="EscalationStage1Span" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fa fa-share" aria-hidden="true"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Escalation Stage 2</span>
+                                <span id="EscalationStage2Span" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                </div>
+                <hr />
+
+                <div class="row">
+
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fa fa-hourglass-start" aria-hidden="true"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">First Response Overdue</span>
+                                <span id="FirstResponseOverdueSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fa fa-hourglass-half" aria-hidden="true"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Every Response Overdue</span>
+                                <span id="EveryResponseOverdueSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-black elevation-1"><i class="fa fa-hourglass-end" aria-hidden="true"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Resolution Overdue</span>
+                                <span id="ResolutionOverdueSpan" class="info-box-number">
+
+
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+
+        $("#loader").show();
+        bindCounts();
+        $("#loader").hide();
+
+
+        $("#DepartmentId").change(function () {
+            if ($("#DepartmentId").val() == "") {
+                $.alert({
+                    title: 'Validation!',
+                    content: 'Please Choose Department.',
+                    type: 'red'
+                });
+            } else {
+                $("#loader").show();
+                bindCounts();
+                $("#loader").hide();
+            }
+        });
+
+    });
+
+
+    function bindCounts() {
+        var jsonObject =
+        {
+            DepartmentId: $("#DepartmentId").val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/User/Dashboard/GetDepartmentWiseCount",
+            dataType: "json",
+            data: jsonObject,
+
+            success: function (data, textStatus, xhr) {
+                if (data.length != 0) {
+                    $("#OpenSpan").empty();
+                    $("#ResolvedSpan").empty();
+                    $("#InProgressSpan").empty();
+                    $("#OnHoldSpan").empty();
+                    $("#RecentlyEditedSpan").empty();
+                    $("#OnReplySpan").empty();
+                    $("#OnDeletedSpan").empty();
+                    $("#FirstResponseOverdueSpan").empty();
+                    $("#ResolutionOverdueSpan").empty();
+                    $("#EveryResponseOverdueSpan").empty();
+                    $("#EscalationStage1Span").empty();
+                    $("#EscalationStage2Span").empty();
+                    $("#ClosedSpan").empty();
+                    $("#ReOpenedSpan").empty();
+
+
+                    $("#OpenSpan").html(data[0].OpenCount);
+                    $("#ResolvedSpan").html(data[0].ResolvedCount);
+                    $("#InProgressSpan").html(data[0].InProgressCount);
+                    $("#OnHoldSpan").html(data[0].OnHoldCount);
+                    $("#RecentlyEditedSpan").html(data[0].RecentlyEditedCount);
+                    $("#OnReplySpan").html(data[0].RepliedCount);
+                    $("#OnDeletedSpan").html(data[0].DeletedCount);
+                    $("#FirstResponseOverdueSpan").html(data[0].FirstResponseOverdueCount);
+                    $("#ResolutionOverdueSpan").html(data[0].ResolutionOverdueCount);
+                    $("#EveryResponseOverdueSpan").html(data[0].EveryResponseOverdueCount);
+                    $("#EscalationStage1Span").html(data[0].Escalation1Count);
+                    $("#EscalationStage2Span").html(data[0].Escalation2Count);
+                    $("#ClosedSpan").html(data[0].ClosedCount);
+                    $("#ReOpenedSpan").html(data[0].ReOpenedCount);
+
+                }
+            },
+            error: function (xhr, status, err) {
+                if (xhr.status == 400) {
+                    DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                }
+            }
+        });
+
+
+    }
+
+    function DisplayModelStateErrors(modelState) {
+        var message = "";
+        var propStrings = Object.keys(modelState);
+
+        $.each(propStrings, function (i, propString) {
+            var propErrors = modelState[propString];
+            $.each(propErrors, function (j, propError) {
+                message += propError;
+            });
+            message += "\n";
+        });
+
+        alert(message);
+    };
+</script>

@@ -1,0 +1,46 @@
+﻿@model TicketCore.ViewModels.Tickets.DefaultTicketSettingsViewModel
+
+<form asp-controller="Assignmentload" asp-antiforgery="true" asp-action="Assign" method="post">
+    
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Default Ticket Count Configuration</h3>
+        </div>
+        <div class="card-body register-card-body">
+            <h5>Max / Min Ticket's Per Agent</h5>
+            <hr/>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label class="mandatory"  asp-for="MaxTicketCount"></label>
+                    <input asp-for="MaxTicketCount" min="0" maxlength="2" placeholder="Enter Max Ticket Per Agent" class="form-control"/>
+                    <span class="text-danger" asp-validation-for="MaxTicketCount"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="mandatory" asp-for="MinTicketsCount"></label>
+                    <input asp-for="MinTicketsCount" min="0" maxlength="2" placeholder="Enter Min Tickets Per Agent" class="form-control"/>
+                    <span class="text-danger" asp-validation-for="MinTicketsCount"></span>
+                </div>
+            </div>
+            <hr/>
+            <h5>Auto Closing Tickets after Resolved in Time</h5>
+            <hr/>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label class="mandatory" asp-for="AutoTicketsCloseHour"></label>
+                    <input asp-for="AutoTicketsCloseHour" min="0" maxlength="2" placeholder="Enter Close Hour" class="form-control"/>
+                    <span class="text-danger" asp-validation-for="AutoTicketsCloseHour"></span>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="mandatory"  asp-for="AutoTicketsCloseMin"></label>
+                    <input asp-for="AutoTicketsCloseMin" min="0" maxlength="2" placeholder="Enter Close Mins" class="form-control"/>
+                    <span class="text-danger" asp-validation-for="AutoTicketsCloseMin"></span>
+                </div>
+            </div>
+            <input type="hidden" asp-for="DefaultTicketId"/>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-success">Save</button>
+
+        </div>
+    </div>
+</form>

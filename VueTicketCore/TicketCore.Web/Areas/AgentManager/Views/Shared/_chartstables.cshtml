@@ -1,0 +1,20 @@
+﻿@*@model List<TicketCore.ViewModels.Dashboard.ReporterDepartmentWiseStatusBugsCountViewModel>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>TotalCount</th>
+        </tr>
+    </thead>
+    <tbody>
+      @foreach (var data in Model)
+      {
+          <tr>
+              <td>@data.StatusName</td>
+              <td>@data.TotalCount</td>
+              
+          </tr>
+      }
+    </tbody>
+</table>*@

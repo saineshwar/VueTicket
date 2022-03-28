@@ -1,0 +1,88 @@
+﻿@using TicketCore.Web.Resources
+@model List<TicketCore.ViewModels.Notifications.TicketNotificationViewModel>
+@inject LocalizationService LocalizationService
+@{
+    ViewBag.PageName = "";
+}
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title"> @LocalizationService.GetLocalizedHtmlString("Notification")</h3>
+        </div>
+        <div class="card-body register-card-body">
+            @if (Model.Any())
+            {
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                       
+
+                            <th>@LocalizationService.GetLocalizedHtmlString("TrackingId")</th>
+                            <th>@LocalizationService.GetLocalizedHtmlString("NotificationType")</th>
+                            <th>@LocalizationService.GetLocalizedHtmlString("TicketAssignedDate")</th>
+                            <th>@LocalizationService.GetLocalizedHtmlString("NotificationDate")</th>
+                            <th> @LocalizationService.GetLocalizedHtmlString("Message")</th>
+                            <th> @LocalizationService.GetLocalizedHtmlString("Action")</th>
+                            <th> @LocalizationService.GetLocalizedHtmlString("View") </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.TrackingId</td>
+                                <td>@item.NotificationType</td>
+                                <td>@item.TicketAssignedDate</td>
+                                <td>@item.NotificationDate</td>
+                                <td>@item.Message</td>
+                                <td>
+                                    <button id="btnsubmit" onclick="ViewNotification('@item.TicketId', '@item.NotificationId');" class="btn btn-info" type="button">View</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-success alert-dismissible">
+                    <strong>Message!</strong> No Notification
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function ViewNotification(trackingIdValue, notificationIdValue) {
+
+
+        $.ajax({
+            type: "POST",
+            url: "/User/MyDashboard/UpdateNotification",
+            data: { NotificationId: notificationIdValue },
+            success: function (data, textStatus, xhr) {
+                if (data.status == "Success") {
+                    window.location.href = "/User/MyTicketDetails/TicketDetails?id=" + trackingIdValue;
+                }
+
+            },
+            error: function (xhr, status, err) {
+                if (xhr.status == 401) {
+                    console.log(xhr);
+                    alert('Error');
+                    window.location.href = "/login/Logout";
+                }
+
+                if (xhr.status == 500) {
+                    console.log(xhr);
+                    alert('Error');
+                    window.location.href = "/login/Logout";
+                }
+            }
+        });
+    }
+</script>

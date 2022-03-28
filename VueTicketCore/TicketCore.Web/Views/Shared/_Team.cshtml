@@ -1,0 +1,45 @@
+﻿@model List<TicketCore.ViewModels.Usermaster.TeamMembers>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+          
+            <th>Name</th>
+            <th>Role</th>
+      
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            @foreach (var data in Model)
+            {
+                <tr>
+                    <td width="40%">
+                        @if (data.Gender == "M")
+                        {
+                            <img id="myprofile_pic" src="~/Images/faces/man.png" style="width:42px;margin-right:8px;" class="img-circle elevation-2" alt="User Image">
+                            @data.FullName
+                        }
+                        else
+                        {
+                            <img id="myprofile_pic" src="~/Images/faces/woman.png" style="width:42px;margin-right:8px;" class="img-circle elevation-2" alt="User Image">
+                            @data.FullName
+                        }
+                    </td>
+                
+                    <td>@data.AssignedRole</td>
+                 
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="2">
+                    <i class="far fa-smile"></i>  No Bugs to Display.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

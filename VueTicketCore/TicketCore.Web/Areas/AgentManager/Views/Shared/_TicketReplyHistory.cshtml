@@ -1,0 +1,170 @@
+﻿@using TicketCore.Data.Tickets.Queries
+@using System.Globalization
+@using TicketCore.Common
+@model TicketCore.ViewModels.Tickets.ViewTicketReplyMainModel
+@inject ITicketViewQueries _ticketViewQueries;
+@using TicketCore.Web.Resources
+@inject LocalizationService LocalizationService
+@foreach (var data in Model.ListofTicketreply)
+{
+
+    var setcolor = data.Viewcolor == "S" ? "card card-warning" : "card card-secondary";
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="@setcolor card-outline collapsed-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-reply"></i>
+                        <button type="button" class="btn btn-darktbluechatx btn-sm">@data.RepliedUserName</button>
+                    </h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-primary btn-sm">
+                            <i style="font-size: 14px; color: #50C878" class="fa fa-clock"></i>
+                            @data.CreatedDateDisplay
+                        </button>
+
+
+                        @if (ViewBag.CurrentTicketStatus != null)
+                        {
+                            if ((int)ViewBag.CurrentTicketStatus != (int)StatusMain.Status.Closed && data.RoleId == (int)ViewBag.Currentrole)
+                            {
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-bars"></i>
+                                    </button>
+                                    @if (ViewBag.CurrentTicketStatus != null)
+                                    {
+                                        if ((int)ViewBag.CurrentTicketStatus != (int)StatusMain.Status.Closed
+                                            && data.RoleId == (int)ViewBag.Currentrole
+                                        && data.DeleteStatus == false && (bool)ViewBag.CurrentDeleteTicketStatus == false)
+                                        {
+                                            <div class="dropdown-menu dropdown-menu-right" role="menu" style="">
+
+                                                <a asp-area="AgentManager" asp-controller="MyTicket" class="dropdown-item" asp-action="EditReply" asp-route-tId="@data.TicketId" asp-route-rid="@data.TicketReplyId"><i class="fas fa-pencil-alt"></i> @LocalizationService.GetLocalizedHtmlString("EditTicketReply")</a>
+                                            </div>
+                                        }
+
+                                    }
+
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="btn-group">
+                                    <button type="button" disabled="disabled" class="btn btn-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-bars"></i>
+                                    </button>
+                                </div>
+                            }
+
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                <i class="fas fa-plus"></i>
+                            </button>
+
+                        }
+                    </div>
+                </div>
+
+                <div class="card-body" style="display: none;">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label asp-for="@data.Message"></label>
+                            <p>
+                                @Html.Raw(data.Message)
+                            </p>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            @{
+                                var listofReplyAttachment = _ticketViewQueries.GetListReplyAttachmentsByAttachmentId(data.TicketId, data.TicketReplyId);
+                            }
+
+                            @if (listofReplyAttachment.Any())
+                            {
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>@LocalizationService.GetLocalizedHtmlString("Attachment")</th>
+                                            <th>@LocalizationService.GetLocalizedHtmlString("Download")</th>
+                                            @if (ViewBag.CurrentTicketStatus != null)
+                                            {
+                                                if ((int)ViewBag.CurrentTicketStatus != (int)StatusMain.Status.Closed && data.RoleId == (int)ViewBag.Currentrole)
+                                                {
+                                                    <th>@LocalizationService.GetLocalizedHtmlString("Action")</th>
+                                                }
+                                            }
+
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var attachment in listofReplyAttachment)
+                                        {
+                                            <tr>
+                                                <td>@attachment.OriginalAttachmentName</td>
+                                                <td>
+                                                    <a class="btn btn-primary btn-xs"
+                                                       data-toggle="tooltip" data-placement="top"
+                                                       title="Download Attachment !" onclick="downloadReplyAttachment('@attachment.TicketId', '@attachment.ReplyAttachmentId')" href="javascript:void(0);"> <i class="fa fa-download"></i> @LocalizationService.GetLocalizedHtmlString("Download") </a>
+
+                                                </td>
+                                                @if (ViewBag.CurrentTicketStatus != null)
+                                                {
+                                                    if ((int)ViewBag.CurrentTicketStatus != (int)StatusMain.Status.Closed && data.RoleId == (int)ViewBag.Currentrole && data.DeleteStatus == false && (bool)ViewBag.CurrentDeleteTicketStatus == false)
+                                                    {
+                                                        <td>
+                                                            <a data-toggle="tooltip"
+                                                               data-placement="top"
+                                                               title="Delete Attachment !"
+                                                               class="btn btn-danger btn-xs" onclick="deleteReplyAttachment('@attachment.TicketId','@attachment.TicketReplyId','@attachment.ReplyAttachmentId')" href="javascript:void(0);"> <i class="fa fa-trash"></i>   @LocalizationService.GetLocalizedHtmlString("Delete")</a>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <span>-</span>
+                                                        </td>
+                                                    }
+                                                }
+
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                        <p> @LocalizationService.GetLocalizedHtmlString("NoAttachments")  </p>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer pull-right">
+                    <div class="form-group col-md-12">
+                        <i class="fa fa-sticky-note" aria-hidden="true"></i> <label asp-for="@data.Note"></label>
+                        <p>
+                            @if (string.IsNullOrEmpty(data.Note))
+                            {
+                                <span>No Note </span>
+                            }
+                            else
+                            {
+                                @Html.Raw(data.Note)
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

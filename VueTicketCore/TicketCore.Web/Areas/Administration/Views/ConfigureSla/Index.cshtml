@@ -1,0 +1,158 @@
+﻿@{
+    ViewBag.PageName = "Configure SLA";
+}
+@using TicketCore.Web.Resources
+@inject LocalizationService LocalizationService
+@await Html.PartialAsync("~/Views/Shared/_DatatablesCss.cshtml")
+
+<div class="col-md-12">
+    <div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title">@LocalizationService.GetLocalizedHtmlString("All")</h3>
+        </div>
+        <div class="card-body">
+            <table id="CommonDataTable" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>SlaPoliciesId</th>
+                        <th>Priority</th>
+                        <th>First Response (Hour)</th>
+                        <th>First Response (Mins)</th>
+                        <th>Next Response (Hour)</th>
+                        <th>Next Response (Mins)</th>
+                        <th>Resolution Response (Hour)</th>
+                        <th>Resolution Response (Mins)</th>
+                        <th>Escalation</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@await Html.PartialAsync("~/Views/Shared/_DatatablesScripts.cshtml")
+@Html.Hidden("item-to-delete", "", new { @id = "item-to-delete" })
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#CommonDataTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                'order': [0, 'desc'],
+                "filter": true,
+                "ajax": {
+                    "url": "/Administration/ConfigureSla/GridAllSlaPolicies",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }, {
+                        "targets": [2],
+                        "orderable": false,
+                        "searchable": false
+                    }, {
+                        "targets": [3],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [4],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [5],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [6],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [7],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [8],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [9],
+                        "orderable": false,
+                        "searchable": false
+                    }
+
+                ],
+                "columns": [
+                    { "data": "SlaPoliciesId", "name": "SlaPoliciesId", "autoWidth": true },
+                    { "data": "PriorityName", "name": "PriorityName", "autoWidth": true },
+                    { "data": "FirstResponseHour", "name": "FirstResponseHour", "autoWidth": true },
+                    { "data": "FirstResponseMins", "name": "FirstResponseMins", "autoWidth": true },
+                    { "data": "NextResponseHour", "name": "NextResponseHour", "autoWidth": true },
+                    { "data": "NextResponseMins", "name": "NextResponseMins", "autoWidth": true },
+                    { "data": "ResolutionResponseHour", "name": "ResolutionResponseHour", "autoWidth": true },
+                    { "data": "ResolutionResponseMins", "name": "ResolutionResponseMins", "autoWidth": true },
+                    { "data": "EscalationStatus", "name": "EscalationStatus", "autoWidth": true },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return ' <button type="button" class="btn btn-danger" onclick="Delete(' + full.SlaPoliciesId + ');"> Delete </button>';
+                        }
+                    }
+                ]
+            });
+
+
+
+        });
+
+        function Delete(slaPoliciesId) {
+            $.confirm({
+                title: 'Delete!',
+                content: 'Do you want to Delete Sla Policies!',
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            url: "/Administration/ConfigureSla/Delete",
+                            type: "POST",
+                            data: { SlaPoliciesId: slaPoliciesId },
+                            success: function (data, textStatus, xhr) {
+                                if (data.Result == "success") {
+                                    location.reload();
+                                }
+                                if (data.Result == "failed") {
+                                    $.alert('Something Went Wrong');
+                                }
+                            },
+                            error: function (xhr, status, err) {
+                                if (xhr.status == 401) {
+                                    alert('Error');
+                                    window.location.href = "/Portal/Logout";
+                                }
+                                if (xhr.status == 500) {
+                                    alert('Error');
+                                    window.location.href = "/Portal/Logout";
+                                }
+                            }
+                        });
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                }
+            });
+        }</script>
+
+
+}
+

@@ -1,0 +1,159 @@
+﻿@using TicketCore.Web.Resources
+@model List<TicketCore.ViewModels.Knowledgebase.KnowledgeSearch>
+@inject LocalizationService LocalizationService
+@{
+    ViewBag.PageName = "";
+
+}
+
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">@LocalizationService.GetLocalizedHtmlString("Search")</h3>
+        </div>
+        <div class="card-body register-card-body">
+
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <input id="search" class="form-control" type="text" />
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="button" class="btn btn-success" id="BtnSearch">Search</button>
+            <button type="button" class="btn btn-primary" id="BtnClear">Clear</button>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">@LocalizationService.GetLocalizedHtmlString("Articles")</h3>
+        </div>
+        <div class="card-body register-card-body">
+
+            <div id="SearchData" class="form-row">
+                <div class="form-group col-md-12">
+                    @if (Model != null)
+                    {
+                        if (Model.Count > 0)
+                        {
+                            <table>
+                                @foreach (var tempKnowledgeSearch in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <i class="fa fa-file" style="font-size:10px"> </i>
+                                            <a target="_blank" href="/Administrator/Search/ArticleView?id=@tempKnowledgeSearch.KnowledgebaseId">An Article From @tempKnowledgeSearch.DepartmentName </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <i class="fa fa-arrow-right" style="font-size: 10px; color: crimson"> </i>  @tempKnowledgeSearch.Subject
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <br />
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#search").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Administrator/Search/GetAllArticle",
+                    type: "GET",
+                    dataType: "json",
+                    data: { searchtext: request.term },
+                    success: function (data) {
+                        response($.map(data,
+                            function (item) {
+                                return { label: item.Subject, value: item.KnowledgebaseId };
+                            }));
+                    }
+                });
+            },
+            error: function (response) {
+                alert(response.responseText);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            select: function (e, i) {
+                $("#search").val(i.item.label);
+                $.ajax({
+                    url: "/Administrator/Search/GetAllArticle",
+                    type: "GET",
+                    dataType: "json",
+                    data: { searchtext: $("#search").val() },
+                    success: function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            $('#SearchData').empty();
+                            var user = '<table>';
+                            var keyval = 1;
+                            $.each(data,
+                                function (key, val) {
+                                    user += '<tr><td> <i class="fa fa-file"> </i>  <a target="_blank" href="/Administrator/Search/ArticleView?id=' + val.KnowledgebaseId + '">' + 'An Article From ' + val.DepartmentName + ' Category </a></td></tr>';
+                                    user += '<tr><td> <i class="fa fa-arrow-right" style="font-size: 10px; color: crimson"> </i> ' + val.Subject + '</td></tr>';
+                                    user += '<tr><td> <br /></td></tr>';
+                                    keyval = keyval + 1;
+                                });
+                            user += "</table>";
+                            $('#SearchData').append(user);
+                        }
+                    }
+                });
+
+                return false;
+            },
+            minLength: 1
+        });
+
+
+        $("#BtnSearch").click(function () {
+            $.ajax({
+                url: "/Administrator/Search/GetAllArticle",
+                type: "GET",
+                dataType: "json",
+                data: { searchtext: $("#search").val() },
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        $('#SearchData').empty();
+                        var user = '<table>';
+                        var keyval = 1;
+                        $.each(data,
+                            function (key, val) {
+                                user += '<tr><td> <i class="fa fa-file"> </i>  <a target="_blank" href="/Administrator/Search/ArticleView?id=' + val.KnowledgebaseId + '">' + 'An Article From ' + val.DepartmentName + ' Category </a></td></tr>';
+                                user += '<tr><td> <i class="fa fa-arrow-right" style="font-size: 10px; color: crimson"> </i> ' + val.Subject + '</td></tr>';
+                                user += '<tr><td> <br /></td></tr>';
+                                keyval = keyval + 1;
+                            });
+                        user += "</table>";
+                        $('#SearchData').append(user);
+                    }
+                }
+            });
+        });
+
+
+        $("#BtnClear").click(function () {
+            window.location.reload();
+        });
+
+    });
+</script>

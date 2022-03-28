@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.PageName = " Assigning Department";
+}
+@using TicketCore.Web.Resources
+@inject LocalizationService LocalizationService
+@await Html.PartialAsync("~/Views/Shared/_DatatablesCss.cshtml")
+
+<div class="col-md-12">
+    <div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title">@LocalizationService.GetLocalizedHtmlString("All")</h3>
+        </div>
+        <div class="card-body">
+            <table id="DatatablesUserMaster" class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>DepartmentConfigrationId</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Agent Admin</th>
+                        <th>HOD</th>
+                        <th>Edit</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Views/Shared/_DatatablesScripts.cshtml")
+
+@section scripts
+{
+
+    <script src="~/plugins/moment/moment.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#DatatablesUserMaster').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "order": [[0, "desc"]],
+                "filter": true,
+                "ajax": {
+                    "url": "/Administration/AssigningDepartment/GridAllDepartment",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }, {
+                        "targets": [2],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [3],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [4],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [5],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [6],
+                        "orderable": false,
+                        "searchable": false
+                    }
+
+
+                ],
+                "columns": [
+                    { "data": "DepartmentConfigrationId", "name": "DepartmentConfigrationId", "autoWidth": true },
+                    { "data": "Name", "name": "Name", "autoWidth": true },
+                    { "data": "DepartmentName", "name": "DepartmentName", "autoWidth": true },
+                    { "data": "UserName", "name": "UserName", "autoWidth": true },
+                    { "data": "HodName", "name": "HodName", "autoWidth": true },
+                    {
+                        "render": function (data, type, full, meta) {
+                            return '<a class="btn btn-primary" href="/Administration/AssigningDepartment/EditAssigned/' + full.DepartmentConfigrationId + '"> Edit</a>';
+                        }
+                    },
+                    {
+                        "render": function (data, type, full, meta) {
+                            if (full.Status == "Active") {
+                                return '<button type="button" class="btn btn-success" onclick="Delete(' + full.DepartmentConfigrationId + ');">  Active  </button>';
+                            }
+                            if (full.Status == "InActive") {
+                                return '<button type="button" class="btn btn-danger" onclick="Delete(' + full.DepartmentConfigrationId + ');">  InActive </button>';
+                            }
+                        }
+                    }
+                ]
+            });
+        });
+
+        function Delete(tempcatid) {
+            $.confirm({
+                title: 'Change Status!',
+                content: 'Do you want to Change Status!',
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            url: "/Administration/AssigningDepartment/Delete",
+                            type: "POST",
+                            data: { categoryConfigrationId: tempcatid },
+                            success: function (data, textStatus, xhr) {
+                                if (data.Result == "success") {
+                                    location.reload();
+                                }
+                                if (data.Result == "failed") {
+                                    $.alert('Something Went Wrong');
+                                }
+                            },
+                            error: function (xhr, status, err) {
+                                if (xhr.status == 401) {
+                                    alert('Error');
+                                    window.location.href = "/Portal/Logout";
+                                }
+                                if (xhr.status == 500) {
+                                    alert('Error');
+                                    window.location.href = "/Portal/Logout";
+                                }
+                            }
+                        });
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                }
+            });
+        }</script>
+
+
+}

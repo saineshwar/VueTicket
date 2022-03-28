@@ -1,0 +1,230 @@
+﻿
+@using TicketCore.Web.Views.Shared.Components.Footer
+@using TicketCore.Web.Views.Shared.Components.Header
+@using TicketCore.Web.Views.Shared.Components.Sidebar
+@using TicketCore.Data.Usermaster.Queries
+@using Microsoft.AspNetCore.Http
+@using TicketCore.Common
+@using TicketCore.Web.Extensions
+@inject ICheckInStatusQueries _iCheckInStatusQueries
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" href="/favicon.ico" type="image/ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-store" />
+    <meta http-equiv="cache-control" content="private" />
+    <meta http-equiv="cache-control" content="must-revalidate" />
+    <meta http-equiv="cache-control" content="post-check=0" />
+    <meta http-equiv="cache-control" content="pre-check=0" />
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <title>VueTicket's</title>
+
+    @await Html.PartialAsync("_Styles.cshtml")
+</head>
+<body class="hold-transition sidebar-mini sidebar-collapse">
+    <div class="wrapper">
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+
+                </li>
+            </ul>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+
+                @if (_iCheckInStatusQueries.CheckIsCategoryAssignedtoAgent(Context.Session.GetSession<long>("Portal.UserId")))
+                {
+                    if (_iCheckInStatusQueries.CheckIsalreadyCheckedIn(Context.Session.GetSession<long>("Portal.UserId")))
+                    {
+                        <li class="nav-item dropdown">
+                            <button onclick="processout();" type="button" class="btn btn-block btn-outline-primary btn-sm"> Checkout</button>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item dropdown">
+                            <button onclick="processin();" type="button" class="btn btn-block btn-outline-success btn-sm">
+                                Check-In <i class="fa fa-check-circle" aria-hidden="true"></i>
+
+                            </button>
+                        </li>
+                    }
+                }
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="fas fa-sign-out-alt"></i>
+
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-md-right">
+
+
+                        <form asp-area="" asp-controller="Portal" asp-antiforgery="false" id="LogoutForm" asp-action="Logout" method="post">
+                            <a href="javascript:void(0);" oncontextmenu="return false;" onclick="document.getElementById('LogoutForm').submit();" class="dropdown-item">
+                                <!-- Message Start -->
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h3 class="dropdown-item-title">
+                                            Logout
+                                            <span class="float-right text-sm text-danger"><i class="fas fa-power-off"></i></span>
+                                        </h3>
+                                    </div>
+                                </div>
+                                <!-- Message End -->
+                            </a>
+                        </form>
+
+
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <a href="javascript:void(0);" class="brand-link">
+                <img src="~/img/letterv.png" alt="Frapper Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light">VueTicket's</span>
+            </a>
+            <div class="sidebar">
+                @if (!string.IsNullOrEmpty(Context.Session.GetString("Portal.UserName")))
+                {
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                        <div class="image">
+                            <img id="myprofile_pic" src="/img/user.png" class="img-circle elevation-2" alt="User Image">
+                        </div>
+                        <div class="info">
+                            <a href="#" class="d-block">Hi, @Context.Session.GetString("Portal.UserName") </a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                        <div class="info">
+                            <a href="#" class="d-block">Hi, Visitor</a>
+                        </div>
+                    </div>
+                }
+
+
+
+            </div>
+        </aside>
+
+        <div class="content-wrapper">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h5 class="m-0 text-dark">@ViewBag.PageName</h5>
+                        </div>
+                        <div class="col-sm-6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="container-fluid">
+                    @await Html.PartialAsync("_Scripts.cshtml")
+                    @await Html.PartialAsync("~/Views/Shared/_ValidationScriptsPartial.cshtml")
+
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+        <aside class="control-sidebar control-sidebar-dark">
+            <div class="p-3">
+                <h5>Title</h5>
+                <p>Sidebar content</p>
+            </div>
+        </aside>
+        @(await Component.InvokeAsync<FooterViewComponent>())
+    </div>
+
+
+    @await Html.PartialAsync("~/Views/Shared/_BootstrapAlert.cshtml")
+    @await RenderSectionAsync("Scripts", required: false)
+
+<div class="modal fade" id="modal-sm" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"> <img style="height: 32px; width: 32px;" src="~/Images/clock.gif" /> Session Alert</h4>
+            </div>
+            <div class="modal-body">
+                <h5> Your Session will expire in <span id="seconds"></span> seconds.<br /></h5>
+
+                <p> Do you want to extend the session?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" onclick="ResetSession()" class="btn btn-success" data-dismiss="modal">Refresh</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script src="~/scripts/custom/process.inout.js"></script>
+<script src="~/js/site.js"></script>
+
+
+</body>
+</html>
+
+
+<script>
+    /** add active class and stay opened when selected */
+    var url = window.location;
+
+    // for sidebar menu entirely but not cover treeview
+    $('ul.nav-sidebar a').filter(function () {
+        return this.href == url;
+    }).addClass('active');
+
+    // for treeview
+    $('ul.nav-treeview a').filter(function () {
+        return this.href == url;
+    }).parentsUntil(".nav-sidebar > .nav-treeview").addClass('menu-open').prev('a').addClass('active');
+
+    $(document).ready(function ()
+    {
+
+        SessionExpireAlert(1500000);
+
+        $("#btnlayoutlogout").click(function () {
+            $.confirm({
+                title: 'Logout!',
+                content: 'Do you want to Logout !',
+                buttons: {
+                    confirm: function () {
+                        window.location.href = "/Portal/Logout";
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                }
+            });
+        });
+
+    });
+
+
+</script>

@@ -1,0 +1,876 @@
+﻿@using TicketCore.Web.Helpers
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using TicketCore.Common
+@using TicketCore.Web.Resources
+@inject LocalizationService LocalizationService
+@model TicketCore.ViewModels.Tickets.DisplayTicketViewModel
+
+@{
+    Layout = "_LayoutAgent";
+    ViewBag.PageName = "Ticket Details";
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+
+                    <i style="color: #17BAF1; margin-right: 5px; " class="fas fa-ticket-alt"></i>
+                    @LocalizationService.GetLocalizedHtmlString("TicketView")
+                </h3>
+                <div class="card-tools">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        @if (Model.TicketDetailViewModel.StatusId != (int)StatusMain.Status.Closed)
+                        {
+
+                            @if ((int)ViewBag.Currentrole == (int)RolesHelper.Roles.Agent)
+                            {
+                                <div class="dropdown-menu dropdown-menu-right" role="menu" style="">
+                                    <a asp-area="User" class="btn btn-danger" asp-controller="MyTicket" asp-action="Edit" asp-route="@Model.TicketDetailViewModel.TicketId">@LocalizationService.GetLocalizedHtmlString("EditTicket")</a>
+                                </div>
+                            }
+
+                            @if ((int)ViewBag.Currentrole == (int)RolesHelper.Roles.AgentAdmin)
+                            {
+                                <div class="dropdown-menu dropdown-menu-right" role="menu" style="">
+                                    <a href="/MyBug/Edit/@Model.TicketDetailViewModel.TicketId" class="dropdown-item"> <i class="fas fa-pencil-alt"></i> @LocalizationService.GetLocalizedHtmlString("EditTicket")</a>
+                                </div>
+                            }
+                        }
+
+                    </div>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+
+
+
+
+                </div>
+            </div>
+
+            <div class="card-body" style="display: block;">
+
+                @if (Model.TicketDetailViewModel.FirstResponseStatus == true)
+                {
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        First Response Overdue | @Model.TicketDetailViewModel.FirstResponseDue
+                    </div>
+                }
+
+                @if (Model.TicketDetailViewModel.ResolutionStatus == true)
+                {
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert Resolution Due!</h5>
+                        Resolution Response Overdue | @Model.TicketDetailViewModel.ResolutionDue
+                    </div>
+                }
+
+                @if (Model.TicketDetailViewModel.EveryResponseStatus == true)
+                {
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert Every Response Status!</h5>
+                        Every Response Overdue | @Model.TicketDetailViewModel.EveryResponseStatus
+                    </div>
+
+                }
+                @if (Model.TicketDetailViewModel.EscalationStage1Status == true)
+                {
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert Escalation Stage 1 !</h5>
+                        Escalation Stage 1 | @Model.TicketDetailViewModel.EscalationDate1
+                    </div>
+
+                }
+                @if (Model.TicketDetailViewModel.EscalationStage2Status == true)
+                {
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert Escalation Stage 2 !</h5>
+                        Escalation Stage 2 | @Model.TicketDetailViewModel.EscalationDate2
+                    </div>
+
+                }
+
+
+                <input type="hidden" asp-for="TicketDetailViewModel.TicketId" />
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label asp-for="@Model.TicketDetailViewModel.Name"></label><br />
+                        @Model.TicketDetailViewModel.Name
+                    </div>
+                    <div class="form-group col-md-9">
+                        <label asp-for="@Model.TicketDetailViewModel.Subject"></label>
+                        <h6> @Model.TicketDetailViewModel.Subject</h6>
+
+                    </div>
+
+                </div>
+                <hr />
+
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label asp-for="@Model.TicketDetailViewModel.TrackingId"></label><br />
+                        @Model.TicketDetailViewModel.TrackingId
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label asp-for="@Model.TicketDetailViewModel.PriorityName"></label><br />
+                        @if (Model.TicketDetailViewModel.PriorityName == "Urgent")
+                        {
+                            <button type="button" class="btn btn-Urgent btn-sm">@Model.TicketDetailViewModel.PriorityName</button>
+
+                        }
+                        else if (Model.TicketDetailViewModel.PriorityName == "High")
+                        {
+                            <button type="button" class="btn btn-High btn-sm">@Model.TicketDetailViewModel.PriorityName</button>
+
+                        }
+                        else if (Model.TicketDetailViewModel.PriorityName == "Medium")
+                        {
+                            <button type="button" class="btn btn-Medium btn-sm">@Model.TicketDetailViewModel.PriorityName</button>
+
+                        }
+                        else if (Model.TicketDetailViewModel.PriorityName == "Low")
+                        {
+                            <button type="button" class="btn btn-Low btn-sm">@Model.TicketDetailViewModel.PriorityName</button>
+                        }
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label asp-for="@Model.TicketDetailViewModel.DepartmentName"></label><br />
+                        @Model.TicketDetailViewModel.DepartmentName
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label asp-for="@Model.TicketDetailViewModel.MobileNo"></label><br />
+                        @Model.TicketDetailViewModel.MobileNo
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label asp-for="@Model.TicketDetailViewModel.EmailId"></label><br />
+                        @Model.TicketDetailViewModel.EmailId
+                    </div>
+
+
+                </div>
+                <div class="form-row">
+
+                    <div class="form-group col-md-2">
+                        <label asp-for="@Model.TicketDetailViewModel.StatusName"></label><br />
+                        @if (Model.TicketDetailViewModel.DeleteStatus == true)
+                        {
+                            <button type="button" class="btn btn-deletedx btn-sm">Deleted</button>
+                        }
+                        else if (Model.TicketDetailViewModel.FirstResponseStatus == true)
+                        {
+                            <button type="button" class="btn btn-danger btn-sm">Overdue</button>
+                        }
+                        else if (Model.TicketDetailViewModel.ResolutionStatus == true)
+                        {
+                            <button type="button" class="btn btn-danger btn-sm">Overdue</button>
+                        }
+                        else if (Model.TicketDetailViewModel.EveryResponseStatus == true)
+                        {
+                            <button type="button" class="btn btn-danger btn-sm">Overdue</button>
+                        }
+                        else if (Model.TicketDetailViewModel.StatusId == 1)
+                        {
+                            <button type="button" class="btn btn-Newx btn-sm">@Model.TicketDetailViewModel.StatusName</button>
+                        }
+                        else if (Model.TicketDetailViewModel.StatusId == 2)
+                        {
+                            <button type="button" class="btn btn-Resolvedx btn-sm">@Model.TicketDetailViewModel.StatusName</button>
+                        }
+                        else if (Model.TicketDetailViewModel.StatusId == 3)
+                        {
+                            <button type="button" class="btn btn-InProgressx btn-sm">@Model.TicketDetailViewModel.StatusName</button>
+                        }
+                        else if (Model.TicketDetailViewModel.StatusId == 4)
+                        {
+                            <button type="button" class="btn btn-OnHoldx btn-sm">@Model.TicketDetailViewModel.StatusName</button>
+                        }
+                        else if (Model.TicketDetailViewModel.StatusId == 5)
+                        {
+                            <button type="button" class="btn btn-Resolvedx btn-sm">@Model.TicketDetailViewModel.StatusName</button>
+                        }
+                        else if (Model.TicketDetailViewModel.StatusId == 6)
+                        {
+                            <button type="button" class="btn btn-Replyx btn-sm">@Model.TicketDetailViewModel.StatusName</button>
+                        }
+                        else if (Model.TicketDetailViewModel.StatusId == 7)
+                        {
+                            <button type="button" class="btn btn-deletedx btn-sm">@Model.TicketDetailViewModel.StatusName</button>
+                        }
+                        else if (Model.TicketDetailViewModel.StatusId == 8)
+                        {
+                            <button type="button" class="btn btn-Overduex btn-sm">@Model.TicketDetailViewModel.StatusName</button>
+                        }
+                        else if (Model.TicketDetailViewModel.StatusId == 9)
+                        {
+                            <button type="button" class="btn btn-Overduex btn-sm">@Model.TicketDetailViewModel.StatusName</button>
+                        }
+                        else if (Model.TicketDetailViewModel.StatusId == 10)
+                        {
+                            <button type="button" class="btn btn-Overduex btn-sm">@Model.TicketDetailViewModel.StatusName</button>
+                        }
+                        else if (Model.TicketDetailViewModel.StatusId == 11)
+                        {
+                            <button type="button" class="btn btn-darktpurpletimex btn-sm">@Model.TicketDetailViewModel.StatusName</button>
+                        }
+                        else if (Model.TicketDetailViewModel.StatusId == 12)
+                        {
+                            <button type="button" class="btn btn-darktpurpletimex btn-sm">@Model.TicketDetailViewModel.StatusName</button>
+                        }
+                        else if (Model.TicketDetailViewModel.StatusId == 13)
+                        {
+                            <button type="button" class="btn btn-Closedx btn-sm">@Model.TicketDetailViewModel.StatusName</button>
+                        }
+                        else if (Model.TicketDetailViewModel.StatusId == 14)
+                        {
+                            <button type="button" class="btn btn-ReOpenedx btn-sm">@Model.TicketDetailViewModel.StatusName</button>
+                        }
+
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label asp-for="@Model.TicketDetailViewModel.Message"></label>
+                        <p>
+                            @Html.Raw(Model.TicketDetailViewModel.Message)
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-footer">
+
+            </div>
+        </div>
+
+        @if (Model.ViewMainModel.ListofTicketreply.Any())
+        {
+            @await Html.PartialAsync("_TicketReplyHistory", Model.ViewMainModel)
+        }
+
+        @if (Model.TicketReply != null)
+        {
+            if (Model.TicketDetailViewModel.StatusId != (int)StatusMain.Status.Closed)
+            {
+                @await Html.PartialAsync("_TicketReply", Model.TicketReply)
+            }
+            else
+            {
+                <div class="alert alert-success">
+                    <strong>Message!</strong> This Ticket is Closed.
+                </div>
+            }
+
+        }
+    </div>
+    <div class="col-md-3">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-info-circle"></i> @LocalizationService.GetLocalizedHtmlString("Quickinformation")</h3>
+            </div>
+            <div class="card-body">
+                <span>
+                    <label asp-for="@Model.TicketDetailViewModel.Name"></label> :
+                    @Model.TicketDetailViewModel.Name
+                </span>
+                <br />
+                <span>
+                    <label asp-for="@Model.TicketDetailViewModel.TrackingId"></label> :  @Model.TicketDetailViewModel.TrackingId
+                </span>
+
+                <br />
+                <span>
+                    <label asp-for="@Model.TicketDetailViewModel.CreatedDate"></label>
+                    : @Model.TicketDetailViewModel.CreatedDate
+                </span>
+                <br />
+                <span>
+                    <label asp-for="@Model.TicketDetailViewModel.AssignedTicketUser"></label>
+                    : @Model.TicketDetailViewModel.AssignedTicketUser
+                </span>
+            </div>
+        </div>
+
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-bars"></i> @LocalizationService.GetLocalizedHtmlString("QuickChange")
+                </h3>
+            </div>
+            <div class="card-body">
+                @if (Model.ExpressChangesViewModel != null)
+                {
+                    @await Html.PartialAsync("_ExpressChangesPartial", Model.ExpressChangesViewModel)
+                }
+            </div>
+        </div>
+
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-paperclip"></i> @LocalizationService.GetLocalizedHtmlString("Attachments")</h3>
+            </div>
+            <div class="card-body">
+                @if (Model.ListofAttachments != null)
+                {
+                    if (Model.ListofAttachments.Any())
+                    {
+                        @await Html.PartialAsync("_TicketAttachment", Model)
+                    }
+                    else
+                    {
+                <span>@LocalizationService.GetLocalizedHtmlString("NoAttachments") </span>
+                    }
+                }
+                else
+                {
+            <span>@LocalizationService.GetLocalizedHtmlString("NoAttachments") </span>
+                }
+            </div>
+        </div>
+
+        <div class="card card-dark card-outline">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-history"></i> @LocalizationService.GetLocalizedHtmlString("TicketHistory")</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group col-md-6">
+                    <button type="button" id="btnActivites" class="btn btn-block btn-outline-info">
+                        <i class="fas fa-history"></i> @LocalizationService.GetLocalizedHtmlString("Activities")
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-lg" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+
+                    <i class="fas fa-history"></i> @LocalizationService.GetLocalizedHtmlString("Activities")
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div id="Tickethistory" style="height:600px;overflow-y:auto;" class="modal-body">
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<script src="~/js/ckeditor/ckeditor.js"></script>
+<script asp-append-version="true" src="~/Scripts/custom/validate.file.js"></script>
+<script>
+
+  @if (Model.TicketDetailViewModel.StatusId != (int)StatusMain.Status.Closed)
+  {
+      <text>
+    CKEDITOR.replace('Message', { htmlEncodeOutput: true });
+      </text>
+  }
+
+
+    $("#btnreply").click(function () {
+        $.confirm({
+            title: 'Confirmation!',
+            content: 'Do you want to Reply on Ticket?',
+            type: 'green',
+            buttons:
+            {
+                confirm: {
+                    text: 'Confirm',
+                    btnClass: 'btn-green',
+                    action: function () {
+                        data();
+                        return true;
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                },
+                close: function () {
+                }
+            }
+        });
+
+    });
+
+
+    $("#btnreopenticket").click(function () {
+          $.confirm({
+              title: 'Confirmation!',
+              content: 'Do you want to ReOpen this Ticket again?',
+              type: 'green',
+              buttons:
+              {
+                  confirm: {
+                      text: 'Yes',
+                      btnClass: 'btn-green',
+                      action: function ()
+                      {
+                          $("#loader").show();
+                          var jsonObject =
+                          {
+                              ticketId: $("#BugDetailViewModel_BugId").val()
+                          };
+
+                          $.ajax({
+                              type: "POST",
+                              url: "/BugDetails/ChangeStatus",
+                              dataType: "json",
+                              data: jsonObject,
+
+                              success: function (data, textStatus, xhr)
+                              {
+                                 location.reload();
+                              },
+                              error: function (xhr, status, err) {
+                                  if (xhr.status == 400) {
+                                      DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                                  }
+                              }
+                          });
+
+                          return true;
+                      },
+                      cancel: function () {
+                          $.alert('Canceled!');
+                          location.reload();
+                      }
+                  },
+                  close: function () {
+                      location.reload();
+                  }
+              }
+          });
+
+      });
+
+    function data() {
+        var textboxData = CKEDITOR.instances.Message.getData();
+        if (textboxData === '') {
+            $.alert({
+                title: 'Validation!',
+                content: 'Enter Ticket Description.',
+                type: 'red'
+            });
+        }
+        else if ($("#StatusId").val() === '') {
+            $.alert({
+                title: 'Validation!',
+                content: 'Select Reply Status',
+                type: 'red'
+            });
+        }
+        else {
+
+
+            var desc = CKEDITOR.instances['Message'].getData();
+            var formData = new FormData();
+            formData.append('file1', $('#file1')[0].files[0]);
+            formData.append('file2', $('#file2')[0].files[0]);
+            formData.append('file3', $('#file3')[0].files[0]);
+            formData.append('Message', desc);
+            formData.append('TicketId', $("#TicketDetailViewModel_TicketId").val());
+            formData.append('StatusId', $("#StatusId").val());
+            formData.append('Note', $("#Note").val());
+
+            $("#loader").show();
+            $.ajax({
+                type: "POST",
+                url: "/User/MyTicket/TicketReply",
+                contentType: false,
+                processData: false,
+                data: formData,
+                dataType: "json",
+                success: function (data, textStatus, xhr) {
+                    if (data.Result == "success") {
+                        location.reload();
+                    } else {
+                        $.alert(data.Message);
+                    }
+                },
+                error: function (xhr, status, err) {
+                    if (xhr.status == 401) {
+                        $.alert('Error');
+                        window.location.href = "/Portal/Logout";
+                    }
+
+                    if (xhr.status == 500) {
+                        $.alert('Error');
+                        window.location.href = "/Portal/Logout";
+                    }
+                }
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        $("#PriorityId").change(function () {
+            $.confirm({
+                title: 'Confirmation!',
+                content: 'Are you sure you want to change Priority this?',
+                type: 'green',
+                buttons:
+                {
+                    confirm: {
+                        text: 'Yes',
+                        btnClass: 'btn-green',
+                        action: function () {
+                            if ($("#PriorityId").val() != "") {
+                                var jsonObject =
+                                {
+                                    ticketId: $("#BugDetailViewModel_BugId").val(),
+                                    PriorityId: $("#PriorityId").val()
+                                };
+
+                                $("#loader").show();
+
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/BugDetails/ChangePriority",
+                                    dataType: "json",
+                                    data: jsonObject,
+                                    success: function (data, textStatus, xhr) {
+                                        $.confirm({
+                                            title: 'Message!',
+                                            content: 'Ticket Priority Updated Successfully',
+                                            type: 'blue',
+                                            buttons:
+                                            {
+                                                confirm: {
+                                                    text: 'OK',
+                                                    btnClass: 'btn-blue',
+                                                    action: function ()
+                                                    {
+
+                                                        location.reload();
+                                                    },
+                                                    cancel: function () {
+                                                        $.alert('Canceled!');
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    },
+                                    error: function (xhr, status, err) {
+                                        if (xhr.status == 400) {
+                                            DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                                        }
+                                    }
+                                });
+                            }
+                            return true;
+                        },
+                        cancel: function () {
+                            $.alert('Canceled!');
+                            location.reload();
+                        }
+                    },
+                    close: function () {
+                        location.reload();
+                    }
+                }
+            });
+        });
+
+        $("#AssignedToId").change(function ()
+        {
+            $.confirm({
+                title: 'Confirmation!',
+                content: 'Are you sure you want to change Assigned Developer ?',
+                type: 'green',
+                buttons:
+                {
+                    confirm: {
+                        text: 'Yes',
+                        btnClass: 'btn-green',
+                        action: function ()
+                        {
+                            if ($("#AssignedToId").val() != "")
+                            {
+                                var jsonObject =
+                                {
+                                    UserId: $("#AssignedToId").val(),
+                                    ticketId: $("#BugDetailViewModel_BugId").val()
+                                };
+                                if ($("#AssignedToId").val() == '')
+                                {
+                                    alert('You Cannot set this status!');
+                                    location.reload();
+
+                                } else
+                                {
+                                    $("#loader").show();
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/BugDetails/ChangeAssignedTo",
+                                        dataType: "json",
+                                        data: jsonObject,
+
+                                        success: function (data, textStatus, xhr) {
+                                            $.alert("Status Updated Successfully");
+                                            location.reload();
+                                        },
+                                        error: function (xhr, status, err) {
+                                            if (xhr.status == 400) {
+                                                DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        },
+                        cancel: function () {
+                            $.alert('Canceled!');
+                            location.reload();
+                        }
+                    },
+                    close: function () {
+                        location.reload();
+                    }
+                }
+            });
+
+
+
+
+        });
+
+      
+    });
+
+    function downloadAttachment(ticketId, attachmentsId)
+    {
+        $.confirm({
+            title: 'Confirmation!',
+            content: 'Do you want to Download Attachment?',
+            type: 'blue',
+            buttons:
+            {
+                confirm: {
+                    text: 'Confirm',
+                    btnClass: 'btn-blue',
+                    action: function ()
+                    {
+                        window.location = "/User/MyTicket/DownloadAttachMent?attachmentId=" + attachmentsId + "&ticketId=" + ticketId;
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                },
+                close: function () {
+                }
+            }
+        });
+
+    }
+
+    function downloadReplyAttachment(ticketId, attachmentsId)
+    {
+        $.confirm({
+                    title: 'Confirmation!',
+                    content: 'Do you want to Download Attachment?',
+                    type: 'blue',
+                    buttons:
+                    {
+                        confirm: {
+                            text: 'Confirm',
+                            btnClass: 'btn-blue',
+                            action: function ()
+                            {
+                                window.location = "/User/MyTicket/DownloadReplyAttachment?attachmentId=" + attachmentsId + "&ticketId=" + ticketId;
+                            },
+                            cancel: function () {
+                                $.alert('Canceled!');
+                            }
+                        },
+                        close: function () {
+
+                        }
+                    }
+                });
+    }
+
+
+    function deleteAttachment(attachmentsId, ticketId) {
+        $.confirm({
+            title: 'Confirmation!',
+            type: 'red',
+            content: 'Do you want to Delete Attachment ?',
+            buttons: {
+                confirm: function () {
+                    if (attachmentsId != "") {
+                        var jsonObject =
+                        {
+                            attachmentsId: attachmentsId,
+                            ticketId: ticketId
+                        };
+
+                        $("#loader").show();
+
+                        $.ajax({
+                            type: "POST",
+                            url: "/User/MyTicket/DeleteReplyAttachment",
+                            dataType: "json",
+                            data: jsonObject,
+                            success: function (data, textStatus, xhr)
+                            {
+                                if (data.Status === true)
+                                {
+                                    $.alert("Attachment Deleted Successfully");
+                                    location.reload();
+                                } else
+                                {
+                                    $.alert("Something Went Wrong While Deleting Attachment Please Try Again after Sometime!");
+                                    $("#loader").hide();
+                                }
+
+                            },
+                            error: function (xhr, status, err) {
+                                if (xhr.status == 400) {
+                                    DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                                }
+                            }
+                        });
+                    }
+                },
+                cancel: function () {
+                    $.alert('Canceled!');
+                }
+            }
+        });
+
+
+    }
+
+    function deleteReplyAttachment(ticketId, ticketReplyId,attachmentsId) {
+        $.confirm({
+            title: 'Confirmation!',
+            type: 'red',
+            content: 'Do you want to Delete Attachment ?',
+            buttons: {
+                confirm: function () {
+                    if (attachmentsId != "") {
+                        var jsonObject =
+                        {
+                            ticketId: ticketId,
+                            ticketReplyId: ticketReplyId,
+                            attachmentsId: attachmentsId
+                        };
+
+                        $("#loader").show();
+
+                        $.ajax({
+                            type: "POST",
+                            url: "/User/MyTicket/DeleteReplyAttachment",
+                            dataType: "json",
+                            data: jsonObject,
+                            success: function (data, textStatus, xhr)
+                            {
+                                if (data.Status === true)
+                                {
+                                    $.alert("Attachment Deleted Successfully");
+                                    location.reload();
+                                } else
+                                {
+                                    $.alert("Something Went Wrong While Deleting Attachment Please Try Again after Sometime!");
+                                    $("#loader").hide();
+                                }
+
+                            },
+                            error: function (xhr, status, err) {
+                                if (xhr.status == 400) {
+                                    DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                                }
+                            }
+                        });
+                    }
+                },
+                cancel: function () {
+                    $.alert('Canceled!');
+                }
+            }
+        });
+
+
+    }
+
+
+    $("#btnActivites").click(function () {
+
+        if ($("#TicketDetailViewModel_TicketId").val() != "")
+                {
+                    var jsonObject =
+                    {
+                        Ticketid: $("#TicketDetailViewModel_TicketId").val()
+                    };
+
+                    $("#loader").show();
+
+                    $.ajax({
+                            type: "POST",
+                        url: "/User/MyTicket/GetTicketActivities",
+                            dataType: "html",
+                            data: jsonObject,
+
+                            success: function (data, textStatus, xhr)
+                            {
+                                if (data.length != 0) {
+
+                                    $("#Tickethistory").html(data);
+                                    $("#modal-lg").modal('show');
+
+                                    $("#loader").hide();
+                                }
+                            },
+                            error: function (xhr, status, err) {
+                                if (xhr.status == 400) {
+                                    DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                                }
+                            }
+                        });
+
+                }
+
+    });
+
+      function DisplayModelStateErrors(modelState) {
+          var message = "";
+          var propStrings = Object.keys(modelState);
+
+          $.each(propStrings, function (i, propString) {
+              var propErrors = modelState[propString];
+              $.each(propErrors, function (j, propError) {
+                  message += propError;
+              });
+              message += "\n";
+          });
+
+          alert(message);
+      };
+
+</script>

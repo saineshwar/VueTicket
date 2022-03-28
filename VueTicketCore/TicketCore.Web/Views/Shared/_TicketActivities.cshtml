@@ -1,0 +1,51 @@
+﻿@model List<TicketCore.ViewModels.Tickets.TicketHistoryResponse>
+
+<div class="col-md-12">
+    <div>
+        @if (Model.Any())
+        {
+
+
+            @foreach (var data in Model)
+            {
+
+
+                <div class="direct-chat-msg">
+                    <div class="direct-chat-infos clearfix">
+                        <span class="direct-chat-name float-left">
+                        
+                           @data.Name
+                            </span>
+
+                        <span class="direct-chat-timestamp float-right">@data.ProcessDate</span>
+                    </div>
+
+                    @if (@data.Avatar == "M")
+                    {
+                        <img class="direct-chat-img" src="~/Images/faces/man.png" alt="Message User Image">
+                    }
+                    else
+                    {
+                        <img class="direct-chat-img" src="~/Images/faces/woman.png" alt="Message User Image">
+                    }
+
+
+                    <div class="direct-chat-text">
+                    
+                        
+                        <button type="button" id="btnActivities" class="btn btn-primary btn-xs">@data.Activities</button>
+                     <br/>
+                        @data.Message
+                    </div>
+                </div>
+
+
+            }
+
+        }
+        else
+        {
+            <p> No Activites Found </p>
+        }
+    </div>
+</div>

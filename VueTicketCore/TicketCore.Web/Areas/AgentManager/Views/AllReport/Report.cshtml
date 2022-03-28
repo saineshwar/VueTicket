@@ -1,0 +1,806 @@
+﻿@using TicketCore.Web.Resources
+@model TicketCore.ViewModels.Reports.AgentAdminReportViewModel
+@inject LocalizationService LocalizationService
+@{
+    ViewBag.PageName = "Report";
+
+}
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title"> @LocalizationService.GetLocalizedHtmlString("Report")</h3>
+        </div>
+
+        <form asp-controller="AllReport" id="Reportform" asp-antiforgery="true" enctype="multipart/form-data" asp-action="Report" method="post">
+
+            <div class="card-body register-card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label class="mandatory" asp-for="ReportId"></label>
+                        <select asp-for="ReportId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofReport, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="ReportId"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="mandatory" asp-for="DepartmentId"></label>
+                        <select asp-for="DepartmentId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofDepartment, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="DepartmentId"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="mandatory" asp-for="AgentId"></label>
+                        <select asp-for="AgentId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofAgent, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="AgentId"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="mandatory" asp-for="PriorityId"></label>
+                        <select asp-for="PriorityId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofPriority, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="PriorityId"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="mandatory" asp-for="OverdueTypeId"></label>
+                        <select asp-for="OverdueTypeId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofOverdueTypes, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="OverdueTypeId"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="mandatory" asp-for="Fromdate"></label>
+                        <input asp-for="Fromdate" placeholder="Enter Fromdate" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Fromdate"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="mandatory" asp-for="Todate"></label>
+                        <input asp-for="Todate" placeholder="Enter Todate" class="form-control" />
+                        <span class="text-danger" asp-validation-for="Todate"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" id="btnsubmit" class="btn btn-success">Export</button>
+                <a asp-area="AgentManager" class="btn btn-danger" asp-controller="AllReport" asp-action="Report">Clear</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+<link href="~/plugins/jquery-ui/jquery-ui.css" rel="stylesheet" />
+<script src="~/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function ()
+    {
+
+
+
+            $('#Todate').prop('disabled', true);
+
+            $("#Fromdate").datepicker
+            ({
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                numberOfMonths: 1,
+                changeYear: true,
+                yearRange: new Date().getFullYear() + ':' + new Date().getFullYear(),
+                onSelect: function(date) {
+                    $('#Todate').prop('disabled', false);
+                    var dt2 = $('#Todate');
+                    var startDate = $(this).datepicker('getDate');
+                    var minDate = $(this).datepicker('getDate');
+                    dt2.datepicker('setDate', minDate);
+                    startDate.setDate(startDate.getDate() + 180);
+                    //sets dt2 maxDate to the last day of 30 days window
+                    dt2.datepicker('option', 'maxDate', startDate);
+                    dt2.datepicker('option', 'minDate', minDate);
+                    $(this).datepicker('option', 'minDate', minDate);
+                }
+            });
+
+            $("#Todate").datepicker
+            ({
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                numberOfMonths: 1,
+                yearRange: new Date().getFullYear() + ':' + new Date().getFullYear(),
+                onSelect: function(date) {
+
+                }
+            });
+
+
+            $("#AgentId").prop('disabled', true);
+            $("#OverdueTypeId").prop('disabled', true);
+            $("#PriorityId").prop('disabled', true);
+            $("#Fromdate").prop('disabled', true);
+            $("#Todate").prop('disabled', true);
+
+
+        $("#btnsubmit").click(function ()
+        {
+            if ($("#ReportId").val() == "") {
+                $.alert({
+                    title: 'Validation!',
+                    content: 'Select Report Type.',
+                    type: 'red'
+                });
+
+                return false;
+            } else {
+                if ($("#ReportId").val() == "1")
+                {
+                    if ($("#Fromdate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Fromdate.',
+                            type: 'red'
+                        });
+
+                    }
+
+                    if ($("#Todate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Todate',
+                            type: 'red'
+                        });
+                    }
+
+                    if ($("#AgentId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Agent.',
+                            type: 'red'
+                        });
+                    }
+
+                    if ($("#DepartmentId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Department.',
+                            type: 'red'
+                        });
+                    }
+
+                    $("#Reportform").submit();
+                }
+
+                if ($("#ReportId").val() == "2") {
+
+                    if ($("#Fromdate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Fromdate.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    if ($("#Todate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Todate',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+
+                    if ($("#DepartmentId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Department.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+
+                    $("#Reportform").submit();
+                }
+
+                if ($("#ReportId").val() == "3") {
+
+                    if ($("#Fromdate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Fromdate.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    if ($("#Todate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Todate',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+
+                    if ($("#OverdueTypeId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select OverdueType.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+
+                    if ($("#DepartmentId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Department.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+                    $("#Reportform").submit();
+                }
+
+                if ($("#ReportId").val() == "4") {
+                    if ($("#Fromdate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Fromdate.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    if ($("#Todate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Todate',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+
+                    if ($("#OverdueTypeId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select OverdueType.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+
+                    if ($("#DepartmentId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Department.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    $("#Reportform").submit();
+                }
+
+                if ($("#ReportId").val() == "5") {
+
+                    if ($("#Fromdate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Fromdate.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    if ($("#Todate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Todate',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+
+                    if ($("#DepartmentId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Department.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    $("#Reportform").submit();
+                }
+
+                if ($("#ReportId").val() == "6") {
+                    if ($("#Fromdate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Fromdate.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    if ($("#Todate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Todate',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+
+                    if ($("#DepartmentId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Department.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    $("#Reportform").submit();
+                }
+
+                if ($("#ReportId").val() == "7") {
+
+                    if ($("#Fromdate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Fromdate.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    if ($("#Todate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Todate',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+
+                    if ($("#PriorityId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Priority.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    if ($("#DepartmentId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Department.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    $("#Reportform").submit();
+                }
+
+                if ($("#ReportId").val() == "8") {
+
+
+
+                    if ($("#AgentId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Agent.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    if ($("#DepartmentId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Department.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    $("#Reportform").submit();
+
+                }
+
+                if ($("#ReportId").val() == "9") {
+                    if ($("#Fromdate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Fromdate.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    if ($("#Todate").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Todate',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+
+                    if ($("#AgentId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Agent.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    if ($("#DepartmentId").val() == "") {
+                        $.alert({
+                            title: 'Validation!',
+                            content: 'Select Department.',
+                            type: 'red'
+                        });
+
+                        return false;
+                    }
+
+                    $("#Reportform").submit();
+                }
+            }
+
+
+
+        });
+            $("#ReportId").change(function () {
+                if ($("#ReportId").val() == "") {
+                    ClearValues();
+
+
+                    $("#AgentId").prop('disabled', true);
+                    $("#OverdueTypeId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                    $("#Fromdate").prop('disabled', true);
+                    $("#Todate").prop('disabled', true);
+                }
+
+                if ($("#ReportId").val() == "1") {
+                    $("#AgentId").prop('disabled', false);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+                    $("#OverdueTypeId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+
+                    ClearValues();
+                }
+
+                if ($("#ReportId").val() == "2") {
+                    $("#AgentId").prop('disabled', true);
+                    $("#OverdueTypeId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+                    ClearValues();
+                }
+
+                if ($("#ReportId").val() == "3") {
+                    $("#OverdueTypeId").prop('disabled', false);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+
+                    $("#AgentId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                    ClearValues();
+                }
+
+                if ($("#ReportId").val() == "4") {
+                    $("#OverdueTypeId").prop('disabled', false);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+
+
+                    $("#AgentId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                    ClearValues();
+                }
+
+                if ($("#ReportId").val() == "5") {
+                    $("#AgentId").prop('disabled', true);
+                    $("#OverdueTypeId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+                    ClearValues();
+                }
+
+                if ($("#ReportId").val() == "6") {
+                    $("#AgentId").prop('disabled', true);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+
+                    $("#OverdueTypeId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                    ClearValues();
+                }
+
+                if ($("#ReportId").val() == "7") {
+                    $("#AgentId").prop('disabled', true);
+                    $("#OverdueTypeId").prop('disabled', true);
+
+                    $("#PriorityId").prop('disabled', false);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+                    ClearValues();
+                }
+
+                if ($("#ReportId").val() == "8") {
+                    $("#AgentId").prop('disabled', false);
+                    $("#OverdueTypeId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                    $("#Fromdate").prop('disabled', true);
+                    $("#Todate").prop('disabled', true);
+
+                    ClearValues();
+                }
+
+                if ($("#ReportId").val() == "9") {
+                    $("#AgentId").prop('disabled', false);
+                    $("#OverdueTypeId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+
+                    ClearValues();
+                }
+
+            });
+
+            if ('@Model.ReportId' != "") {
+
+                if ('@Model.ReportId' == "1") {
+                    $("#AgentId").prop('disabled', false);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+                    $("#OverdueTypeId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                }
+
+                if ('@Model.ReportId' == "2") {
+                    $("#AgentId").prop('disabled', true);
+                    $("#OverdueTypeId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+                }
+
+                if ('@Model.ReportId' == "3") {
+                    $("#OverdueTypeId").prop('disabled', false);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+
+                    $("#AgentId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                }
+
+                if ('@Model.ReportId' == "4") {
+                    $("#OverdueTypeId").prop('disabled', false);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+
+                    $("#AgentId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                }
+
+                if ('@Model.ReportId' == "5") {
+                    $("#AgentId").prop('disabled', true);
+                    $("#OverdueTypeId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+                }
+
+                if ('@Model.ReportId' == "6") {
+                    $("#AgentId").prop('disabled', false);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+
+                    $("#OverdueTypeId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                }
+
+                if ('@Model.ReportId' == "7") {
+                    $("#AgentId").prop('disabled', true);
+                    $("#OverdueTypeId").prop('disabled', true);
+
+                    $("#PriorityId").prop('disabled', false);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+                }
+
+                if ('@Model.ReportId' == "8") {
+                    $("#AgentId").prop('disabled', false);
+                    $("#OverdueTypeId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                    $("#Fromdate").prop('disabled', true);
+                    $("#Todate").prop('disabled', true);
+                }
+
+                if ('@Model.ReportId' == "9") {
+                    $("#AgentId").prop('disabled', false);
+                    $("#OverdueTypeId").prop('disabled', true);
+                    $("#PriorityId").prop('disabled', true);
+                    $("#Fromdate").prop('disabled', false);
+                    $("#Todate").prop('disabled', false);
+                }
+            }
+
+
+
+
+
+        });
+
+        function ClearValues()
+        {
+
+            $("#AgentId").val("");
+            $("#OverdueTypeId").val("");
+            $("#PriorityId").val("");
+            $("#Fromdate").val("");
+            $("#Todate").val("");
+        }
+
+</script>
+
+<script type="text/javascript">
+        $(document).ready(function() {
+
+
+
+            $("#btnclear").click(function() {
+                $.confirm({
+                    title: 'Confirmation!',
+                    type: 'green',
+                    content: 'Do you want to Clear Filters?',
+                    buttons: {
+                        confirm: function() {
+                            window.location = '/Administrator/MyTicket/AllTickets';
+                        },
+                        cancel: function() {
+                            $.alert('Canceled!');
+                        }
+                    }
+                });
+            });
+
+
+            $("#DepartmentId").change(function() {
+                $("#loader").show();
+                bindagent();
+                $("#loader").hide();
+            });
+
+
+            if ('@Model.AgentId' !='' )
+            {
+                $.ajax({
+                    type: "POST",
+                    url: "/AgentManager/AllReport/GetAgentList",
+                    data: { DepartmentId: '@Model.DepartmentId' },
+                    dataType: "json",
+                    success: function (data, textStatus, xhr)
+                    {
+                        $("#AgentId").empty();
+                        $.each(data.listofusers,
+                            function (i) {
+                                var optionhtml = '<option value="' + data.listofusers[i].Value + '">' + data.listofusers[i].Text + '</option>';
+                                $("#AgentId").append(optionhtml);
+                            });
+
+                        $("#AgentId").val('@Model.AgentId');
+                    },
+                    error: function(xhr, status, err)
+                    {
+                        if (xhr.status == 401)
+                        {
+                            alert('Error');
+                            window.location.href = "/Portal/Logout";
+                        }
+
+                        if (xhr.status == 500)
+                        {
+                            alert('Error');
+                            window.location.href = "/Portal/Logout";
+                        }
+                    }
+                });
+
+
+
+            };
+
+        });
+
+        function bindagent() {
+            $.ajax({
+                type: "POST",
+                url: "/AgentManager/AllReport/GetAgentList",
+                data: { DepartmentId: $("#DepartmentId").val() },
+                dataType: "json",
+                success: function (data, textStatus, xhr) {
+                    $("#AgentId").empty();
+                    $.each(data.listofusers,
+                        function (i) {
+                            var optionhtml = '<option value="' + data.listofusers[i].Value + '">' + data.listofusers[i].Text + '</option>';
+                            $("#AgentId").append(optionhtml);
+                        });
+
+                },
+                error: function (xhr, status, err) {
+                    if (xhr.status == 401) {
+                        alert('Error');
+                        window.location.href = "/Portal/Logout";
+                    }
+
+                    if (xhr.status == 500) {
+                        alert('Error');
+                        window.location.href = "/Portal/Logout";
+                    }
+                }
+            });
+        }
+
+</script>
+
+
+

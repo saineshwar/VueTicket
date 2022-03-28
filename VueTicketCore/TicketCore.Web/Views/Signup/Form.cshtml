@@ -1,0 +1,240 @@
+﻿@model TicketCore.ViewModels.Signup.SignupFormViewModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VueTicket's | Registration Page</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link asp-append-version="true" rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <link asp-append-version="true" rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link asp-append-version="true" rel="stylesheet" href="~/css/adminlte.min.css">
+
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/js/jqueryconfirm/css/jquery-confirm.css" rel="stylesheet" />
+</head>
+<body class="hold-transition register-page">
+
+    @if (!string.IsNullOrEmpty(Convert.ToString(TempData["Signup_Message_Error"])))
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-ban"></i> Message!</h5>
+            @TempData["Signup_Message_Error"]
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Convert.ToString(TempData["Signup_Message_Success"])))
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-check"></i> Message!</h5>
+            @TempData["Signup_Message_Success"]
+        </div>
+    }
+    <div class="register-box">
+        <div class="register-logo">
+            <img src="~/img/letter-v-64.png" />
+            <hr />
+            <b>VueTicket's</b>
+        </div>
+        <div class="card">
+
+            <div class="card-body register-card-body">
+                <p class="login-box-msg">Register a new membership</p>
+
+                <form id="account" asp-controller="Signup" asp-antiforgery="true" asp-action="Form" method="post">
+                    <div class="input-group mb-3">
+
+
+
+
+
+
+                        <input type="text" class="form-control" autocomplete="new-password" asp-for="UserName" placeholder="UserName">
+
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" autocomplete="off" asp-for="EmailId" placeholder="Email">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span asp-validation-for="EmailId" class="text-danger"></span>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" asp-for="MobileNo" placeholder="MobileNo">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-phone"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span asp-validation-for="MobileNo" class="text-danger"></span>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" autocomplete="new-password" asp-for="Password" placeholder="Password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" autocomplete="new-password" asp-for="ConfirmPassword" placeholder="Retype password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
+                    <div class="input-group mb-3">
+                        <dnt-captcha asp-captcha-generator-max="999999"
+                                     asp-captcha-generator-min="111111"
+                                     asp-captcha-generator-language="English"
+                                     asp-captcha-generator-display-mode="ShowDigits"
+                                     asp-use-relative-urls="true"
+                                     asp-placeholder="Enter Security code"
+                                     asp-validation-error-message="Please enter the security code."
+                                     asp-font-name="Tahoma"
+                                     asp-font-size="20"
+                                     asp-fore-color="#333333"
+                                     asp-back-color="#ccc"
+                                     asp-text-box-class="text-box form-control"
+                                     asp-text-box-template="<span class='input-group-prepend'><span class='form-group-text'></span></span>{0}"
+                                     asp-validation-message-class="text-danger"
+                                     asp-refresh-button-class="fas fa-redo btn-sm"
+                                     asp-show-refresh-button="true"
+                                     asp-use-noise="false" />
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="icheck-primary">
+                                <input asp-for="agreeTerms" type="checkbox">
+                                <label for="agreeTerms">
+                                    I agree to the <a href="#">terms</a>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <button type="submit" id="btnsubmit" class="btn btn-primary btn-block">Register</button>
+                        </div>
+
+                    </div>
+                </form>
+
+
+                <a asp-controller="Portal" class="text-center" asp-action="Login">I already have a membership</a>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>
+
+<script asp-append-version="true" src="~/plugins/jquery/jquery.min.js"></script>
+<script asp-append-version="true" src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script asp-append-version="true" src="~/js/adminlte.min.js"></script>
+
+<script asp-append-version="true" src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script asp-append-version="true" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script asp-append-version="true" src="~/js/jquery.unobtrusive-ajax.js"></script>
+
+
+<script src="~/scripts/sha256.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/js/jqueryconfirm/js/jquery-confirm.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+
+
+
+        $("#btnsubmit").click(function () {
+
+            if ($("#agreeTerms").prop("checked") == false) {
+                $.alert('Please I agree to the terms!');
+                return false;
+            }
+            else if ($('#Password').val() != "" && $('#ConfirmPassword').val() != "") {
+
+                if (validatePassword($('#Password').val()) == false) {
+                    $.alert('New Password Must Have Minimum 7 characters at least 1 Alphabet, 1 Number and 1 Special Character !');
+                    return false;
+                }
+                else {
+
+                    var password = $('#Password').val();
+                    var passwordhash = Sha256.hash(password, false);
+
+                    var confirmpassword = $('#ConfirmPassword').val();
+                    var confirmpasswordhash = Sha256.hash(confirmpassword, false);
+
+                    $('#Password').val(passwordhash);
+                    $('#ConfirmPassword').val(confirmpasswordhash);
+                    $("#account").submit();
+                }
+            }
+
+        });
+
+        $("#Password").blur(function (event) {
+            if ($("#Password").val() != "") {
+                if (validatePassword($("#Password").val()) == false) {
+                    $.alert('New Password Must Have Minimum 7 characters at least 1 Alphabet, 1 Number and 1 Special Character !');
+                    $("#Password").val('');
+                }
+
+                var data = $("#Password").val().length;
+                if (data > 20) {
+                    $.alert('Maximum 20 character password is Allowed!');
+                    $("#Password").val('');
+                }
+            }
+
+        });
+
+
+        $("#UserName").keypress(function (e) {
+            var regex = new RegExp("^[a-zA-Z]+$");
+            var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+            if (regex.test(strigChar)) {
+                return true;
+            }
+            return false;
+        });
+
+    });
+
+
+    function validatePassword(password) {
+        var reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@@$!%*#?&])[A-Za-z\d$@@$!%*#?&]{7,}$/;
+        if (reg.test(password)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>

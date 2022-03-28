@@ -1,0 +1,121 @@
+﻿@using TicketCore.Web.Resources
+@model TicketCore.ViewModels.Usermaster.TeamMembersModel
+@inject LocalizationService LocalizationService
+@{
+    Layout = "_LayoutUser";
+}
+
+
+<div class="col-md-12">
+    <div class="card card-gray card-outline">
+        <div class="card-header">
+            <h3 class="card-title"> <i class="fa fa-users" aria-hidden="true"></i> @LocalizationService.GetLocalizedHtmlString("Team")</h3>
+        </div>
+        <div class="card-body register-card-body">
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label class="mandatory" asp-for="DepartmentId"></label>
+                    <select asp-for="DepartmentId" class="form-control"
+                            asp-items="@(new SelectList(Model.ListofDepartments, "Value", "Text"))">
+                    </select>
+                    <span class="text-danger" asp-validation-for="DepartmentId"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <div id="teamlist"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        if ($("#DepartmentId").val() != "") {
+            var jsonObject =
+            {
+                DepartmentId: $("#DepartmentId").val()
+            };
+
+            $("#loader").show();
+
+            $.ajax({
+                type: "POST",
+                url: "/AgentManager/MyAccount/GetTeamList",
+                dataType: "html",
+                data: jsonObject,
+
+                success: function (data, textStatus, xhr) {
+                    $("#teamlist").empty();
+                    if (data.length != 0) {
+
+                        $("#teamlist").html(data);
+                        $("#loader").hide();
+                    }
+
+                },
+                error: function (xhr, status, err) {
+                    if (xhr.status == 400) {
+                        DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                    }
+                }
+            });
+
+        }
+
+        $("#DepartmentId").change(function () {
+
+            if ($("#DepartmentId").val() != "") {
+                var jsonObject =
+                {
+                    DepartmentId: $("#DepartmentId").val()
+                };
+
+                $("#loader").show();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/AgentManager/MyAccount/GetTeamList",
+                    dataType: "html",
+                    data: jsonObject,
+
+                    success: function (data, textStatus, xhr) {
+                        $("#teamlist").empty();
+                        if (data.length != 0) {
+
+                            $("#teamlist").html(data);
+                            $("#loader").hide();
+                        }
+
+                    },
+                    error: function (xhr, status, err) {
+                        if (xhr.status == 400) {
+                            DisplayModelStateErrors(xhr.responseJSON.ModelState);
+                        }
+                    }
+                });
+
+            }
+
+        });
+    });
+
+
+    function DisplayModelStateErrors(modelState) {
+        var message = "";
+        var propStrings = Object.keys(modelState);
+
+        $.each(propStrings, function (i, propString) {
+            var propErrors = modelState[propString];
+            $.each(propErrors, function (j, propError) {
+                message += propError;
+            });
+            message += "\n";
+        });
+
+        alert(message);
+    };
+
+</script>

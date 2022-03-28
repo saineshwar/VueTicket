@@ -1,0 +1,78 @@
+﻿@using TicketCore.ViewModels.Usermaster
+@{
+    Layout = "_LayoutAgent_Before_CheckIn";
+}
+
+<style>
+    .table td, .table th {
+        padding: .40rem;
+        vertical-align: top;
+        border-top: 1px solid #dee2e6;
+    }
+</style>
+<div class="col-md-12">
+<div class="form-row">
+    <div class="col-md-6">
+        <div class="card card-info card-outline">
+            <div class="card-header">
+                <h3 class="card-title"> <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    Check-In / Check-Out Logs </h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+
+            <div class="card-body register-card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                            <tr>
+
+                                <th>#</th>
+                                <th>Check-In Time</th>
+                                <th>Check-Out Time</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @{ var counter = 1;}
+                            @foreach (var time in (List<AgentDailyActivityModel>)ViewBag.Data)
+                            {
+
+                                <tr>
+                                    <td>@counter</td>
+                                    <td><i class="fa fa-clock-o"> </i> @time.CheckInTime</td>
+                                    <td><i class="fa fa-clock-o"> </i> @time.CheckOutTime</td>
+                                </tr>
+                                counter++;
+
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-info card-outline">
+            <div class="card-header">
+                <h3 class="card-title"> <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    Process GuideLines</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+
+            <div class="card-body register-card-body">
+
+                <ul>
+                    <li>Check-In Begins your day.</li>
+                    <li>Check-Out Ends your day.</li>
+                    <li>You Need to daily Check In and Check out else it will be marked as absent for current day.</li>
+                    <li><i style="color: green" class="fa fa-bullseye"></i> Checked In Indicator</li>
+                    <li><i style="color: red" class="fa fa-bullseye"></i> Checked Out Indicator</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>

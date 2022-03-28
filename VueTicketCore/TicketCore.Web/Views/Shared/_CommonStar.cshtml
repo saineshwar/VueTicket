@@ -1,0 +1,51 @@
+﻿@model List<TicketCore.ViewModels.Dashboard.DisplayStarPerformer>
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Badge</th>
+        <th>Performer</th>
+        <th>Count</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model.Any())
+    {
+        @for (var index = 0; index < Model.Count; index++)
+        {
+            var data = Model[index];
+            <tr>
+                <td>
+                    @if (index == 0)
+                    {
+                        <i class="fa fa-star" style="color: gold" aria-hidden="true"></i>
+                    }
+                    @if (index == 1)
+                    {
+                        <i class="fa fa-star" style="color: silver" aria-hidden="true"></i>
+                    }
+                    @if (index == 2)
+                    {
+                        <i class="fa fa-star" style="color: #CD7F32" aria-hidden="true"></i>
+                    }
+                </td>
+                <td>
+
+
+                    @data.PerformerName
+                </td>
+                <td>@data.TotalCount</td>
+
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="3">
+                <i class="fa fa-frown-o" aria-hidden="true"></i>  No <i class="fa fa-star" style="color: gold" aria-hidden="true"></i> Performer.
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -1,0 +1,45 @@
+﻿@model List<TicketCore.ViewModels.Dashboard.ResponseResolvedTicketViewModel>
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+       
+       
+        <th>Name</th>
+        <th colspan="2">Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model.Any())
+    {
+        @foreach (var data in Model)
+        {
+            <tr>
+                <td>@data.UserName</td>
+                <td style="width: 60%">
+                    <div class="progress progress active">
+                        <div class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: @data.TotalCount%">
+                            <span class="sr-only">@data.TotalCount% Complete</span>
+                        </div>
+                    </div>
+                    
+                </td>
+                <td>
+                    @data.TotalCount
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td>
+                <i class="far fa-smile"></i>  No Data to Display.
+            </td>
+        </tr>
+    }
+
+
+    </tbody>
+</table>

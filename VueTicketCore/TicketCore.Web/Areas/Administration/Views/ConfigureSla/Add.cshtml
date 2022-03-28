@@ -1,0 +1,107 @@
+﻿@model TicketCore.ViewModels.Masters.SlaPoliciesViewModel
+@{
+    ViewBag.PageName = "Configure SLA";
+}
+
+<div class="col-md-12">
+    <form  asp-controller="ConfigureSla" asp-antiforgery="true" asp-action="Add" method="post">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">SLA Configuration</h3>
+            </div>
+
+            <div class="card-body register-card-body">
+                @TempData["MessageErrorPolicies"]
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="PriorityId"></label>
+                        <select asp-for="PriorityId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofPriority, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="PriorityId"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label  class="mandatory" asp-for="BusinessHoursId"></label>
+                        <select asp-for="BusinessHoursId" class="form-control"
+                                asp-items="@(new SelectList(Model.ListofBusinessHours, "Value", "Text"))">
+                        </select>
+                        <span class="text-danger" asp-validation-for="BusinessHoursId"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+
+                        <label  class="mandatory" asp-for="Escalation">Escalation</label>
+                        <input style="margin-top: 30px" type="checkbox" asp-for="Escalation" />
+                        <span class="text-danger" asp-validation-for="Escalation"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card">
+          
+            <div class="card-body register-card-body">
+                <h5>First response time</h5>
+                <hr />
+                <div class="form-row">
+
+                    <div class="form-group col-md-4">
+                        
+                        <label class="mandatory" asp-for="FirstResponseHour"></label>
+                        <input asp-for="FirstResponseHour" min="0" maxlength="2" placeholder="Enter Hour" class="form-control" />
+                        <span class="text-danger" asp-validation-for="FirstResponseHour"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="FirstResponseMins"></label>
+                        <input asp-for="FirstResponseMins" min="0" maxlength="2" placeholder="Enter Mins" class="form-control"/>
+                        <span class="text-danger" asp-validation-for="FirstResponseMins"></span>
+                    </div>
+                </div>
+                <h5>Next response time</h5>
+                <hr />
+                <div class="form-row">
+
+
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="NextResponseHour"></label>
+                        <input asp-for="NextResponseHour" min="0" maxlength="2" placeholder="Enter Hour" class="form-control"/>
+                        <span class="text-danger" asp-validation-for="NextResponseHour"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="NextResponseMins"></label>
+                        <input asp-for="NextResponseMins" min="0" maxlength="2" placeholder="Enter Mins" class="form-control"/>
+                        <span class="text-danger" asp-validation-for="NextResponseMins"></span>
+                    </div>
+                </div>
+                <h5>Resolution response time</h5>
+                <hr />
+                <div class="form-row">
+
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="ResolutionResponseHour"></label>
+                        <input asp-for="ResolutionResponseHour" min="0" maxlength="2" placeholder="Enter Hour" class="form-control"/>
+                        <span class="text-danger" asp-validation-for="ResolutionResponseHour"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="mandatory" asp-for="ResolutionResponseMins"></label>
+                        <input asp-for="ResolutionResponseMins" min="0" maxlength="2" placeholder="Enter Mins" class="form-control"/>
+                        <span class="text-danger" asp-validation-for="ResolutionResponseMins"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success">Save</button>
+                <a asp-area="Administration" class="btn btn-danger" asp-controller="ConfigureSla" asp-action="Add">Clear</a>
+                <a asp-area="Administration" class="btn btn-primary" asp-controller="ConfigureSla" asp-action="Index">List</a>
+
+            </div>
+        </div>
+
+
+
+    </form>
+</div>

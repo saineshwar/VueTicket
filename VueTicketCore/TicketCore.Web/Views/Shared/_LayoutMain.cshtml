@@ -1,0 +1,149 @@
+﻿@using TicketCore.Web.Views.Shared.Components.Header
+@using TicketCore.Web.Views.Shared.Components.Footer
+@using TicketCore.Web.Views.Shared.Components.Sidebar
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+
+    <title>VueTicket's</title>
+
+    @await Html.PartialAsync("_Styles.cshtml")
+    
+    <style>
+        .loader {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: 50% 50% no-repeat rgb(249,249,249);
+            opacity: .8;
+        }
+
+        .loader button {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            z-index: 99999;
+            opacity: .8;
+            margin-left: -120px;
+            margin-top: -15px;
+        }
+
+        .loader button span {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini sidebar-collapse">
+    <div class="wrapper">
+        @(await Component.InvokeAsync<HeaderViewComponent>())
+        @(await Component.InvokeAsync<SidebarViewComponent>())
+
+
+        <div class="content-wrapper">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h5 class="m-0 text-dark">@ViewBag.PageName</h5>
+                        </div>
+                        <div class="col-sm-6">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="container-fluid">
+                    @await Html.PartialAsync("_Scripts.cshtml")
+                    @await Html.PartialAsync("~/Views/Shared/_ValidationScriptsPartial.cshtml")
+
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+        <aside class="control-sidebar control-sidebar-dark">
+            <div class="p-3">
+                <h5>Title</h5>
+                <p>Sidebar content</p>
+            </div>
+        </aside>
+        @(await Component.InvokeAsync<FooterViewComponent>())
+    </div>
+
+<div id='loader' class="loader" style='display: none;'>
+    <button class="btn btn-dark btn-lg" type="button">
+        <span class="spinner-border text-light" role="status" style="color: black" aria-hidden="true"></span>
+        Please Wait ...
+    </button>
+</div>
+
+<div class="modal fade" id="modal-sm" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"> <img style="height: 32px; width: 32px;" src="~/Images/clock.gif" /> Session Alert</h4>
+            </div>
+            <div class="modal-body">
+                <h5> Your Session will expire in <span id="seconds"></span> seconds.<br /></h5>
+
+                <p> Do you want to extend the session?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" onclick="ResetSession()" class="btn btn-success" data-dismiss="modal">Refresh</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+@await Html.PartialAsync("~/Views/Shared/_BootstrapAlert.cshtml")
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+<script src="~/js/site.js"></script>
+
+<script>
+    /** add active class and stay opened when selected */
+    var url = window.location;
+
+    // for sidebar menu entirely but not cover treeview
+    $('ul.nav-sidebar a').filter(function () {
+        return this.href == url;
+    }).addClass('active');
+
+    // for treeview
+    $('ul.nav-treeview a').filter(function () {
+        return this.href == url;
+    }).parentsUntil(".nav-sidebar > .nav-treeview").addClass('menu-open').prev('a').addClass('active');
+
+    $(document).ready(function () {
+        SessionExpireAlert(1500000);
+
+        $("#btnlayoutlogout").click(function () {
+            $.confirm({
+                title: 'Logout!',
+                content: 'Do you want to Logout !',
+                buttons: {
+                    confirm: function () {
+                        window.location.href = "/Portal/Logout";
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    }
+                }
+            });
+        });
+
+    });
+
+</script>

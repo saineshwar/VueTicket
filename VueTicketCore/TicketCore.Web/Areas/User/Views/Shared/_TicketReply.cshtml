@@ -1,0 +1,67 @@
+﻿
+@using TicketCore.Web.Helpers
+@using TicketCore.Web.Resources
+@model TicketCore.ViewModels.Tickets.TicketReplyViewModel
+@inject LocalizationService LocalizationService
+
+<form autocomplete="off" asp-controller="MyTicketDetails" asp-antiforgery="true" id="bugform" enctype="multipart/form-data" asp-action="TicketReply" method="post">
+    <div class="card card-success card-outline">
+        <div class="card-header">
+            <h3 class="card-title mandatory">@LocalizationService.GetLocalizedHtmlString("TicketReply")</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <div class="card-body register-card-body">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+
+                    <textarea asp-for="Message" placeholder="Message" class="form-control" required="required"></textarea>
+                    <input asp-for="TicketId" type="hidden" />
+                    <span class="text-danger" asp-validation-for="Message"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <input name="file1" id="file1" onchange="ValidateDocumentFile(this);" type="file" />
+                </div>
+                <div class="form-group col-md-4">
+                    <input name="file2" id="file2" onchange="ValidateDocumentFile(this);" type="file" />
+                </div>
+                <div class="form-group col-md-4">
+                    <input name="file3" id="file3" onchange="ValidateDocumentFile(this);" type="file" />
+                </div>
+
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <textarea asp-for="Note" placeholder="@LocalizationService.GetLocalizedHtmlString("Note")" class="form-control" required="required"></textarea>
+                </div>
+            </div>
+            <hr />
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label class="mandatory" asp-for="StatusId"></label>
+                    <select asp-for="StatusId" class="form-control"
+                            asp-items="@(new SelectList(Model.ListofStatus, "Value", "Text"))">
+                    </select>
+                    <span class="text-danger" asp-validation-for="StatusId"></span>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer ">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <button type="button" id="btnreply" class="btn btn-success"> <i class="fas fa-check-circle"></i> Submit</button>
+
+                    @if ((int)ViewBag.Currentrole == (int)RolesHelper.Roles.Agent)
+                    {
+                        <a asp-area="User" class="btn btn-primary" asp-controller="MyTicket" asp-action="AllTickets"><i class="fas fa-ban"></i> Cancel</a>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
