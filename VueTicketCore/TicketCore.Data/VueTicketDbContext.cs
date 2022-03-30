@@ -31,9 +31,7 @@ namespace TicketCore.Data
 
         public DbSet<UserMaster> UserMasters { get; set; }
         public DbSet<AssignedRoles> AssignedRoles { get; set; }
- 
         public DbSet<RoleMaster> RoleMasters { get; set; }
-        public DbSet<RegisterVerification> RegisterVerification { get; set; }
         public DbSet<MenuCategory> MenuCategorys { get; set; }
         public DbSet<MenuMaster> MenuMasters { get; set; }
         public DbSet<SubMenuMaster> SubMenuMasters { get; set; }

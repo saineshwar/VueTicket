@@ -52,7 +52,7 @@ namespace TicketCore.Web
             services.Configure<AppSettings>(Configuration.GetSection("ApplicationSettings"));
             services.Configure<AppSettingsProperties>(Configuration.GetSection("ApplicationSettings"));
             
-            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IMailingService, MailingService>();
