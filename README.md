@@ -117,8 +117,7 @@ https://www.microsoft.com/en-us/sql-server/sql-server-downloads
 Released under the [MIT LICENSE](https://github.com/saineshwar/VueTicket/blob/main/LICENSE)
 
 ## Support If Possible 
-<a href="https://www.buymeacoffee.com/f8lkgf5" rel="nofollow"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" 
-width="200" style="max-width:100%;"></a>
+<a href="https://www.buymeacoffee.com/f8lkgf5" target="_blank"><img src="https://github.com/saineshwar/VueTicket/blob/main/images/buymecoffee.jpg" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 ## Database.
 For Database Please send request.
