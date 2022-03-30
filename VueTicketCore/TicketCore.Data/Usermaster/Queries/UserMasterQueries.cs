@@ -240,14 +240,7 @@ namespace TicketCore.Data.Usermaster.Queries
             }
         }
 
-        public UserTokens GetUserSaltbyUserid(long userId)
-        {
-            var usertoken = (from tempuser in _vueTicketDbContext.UserTokens
-                             where tempuser.UserId == userId
-                             select tempuser).FirstOrDefault();
-
-            return usertoken;
-        }
+   
 
         public CommonUserDetailsViewModel GetCommonUserDetailsbyUserName(string username)
         {

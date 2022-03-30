@@ -29,9 +29,12 @@ namespace TicketCore.Web.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAuditCommand _auditCommand;
         public PortalController(IUserMasterQueries userMasterQueries,
-            IUserTokensQueries userTokensQueries,
+           
             INoticeQueries noticeQueries,
-            IVerificationCommand verificationCommand, INotificationService notificationService, ICheckInStatusQueries checkInStatusQueries, IHttpContextAccessor httpContextAccessor, IAuditCommand auditCommand)
+            IVerificationCommand verificationCommand, 
+            INotificationService notificationService,
+            ICheckInStatusQueries checkInStatusQueries,
+            IHttpContextAccessor httpContextAccessor, IAuditCommand auditCommand)
         {
             _userMasterQueries = userMasterQueries;
             _noticeQueries = noticeQueries;

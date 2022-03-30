@@ -19,7 +19,7 @@ namespace TicketCore.Data.Usermaster.Queries
         List<SelectListItem> GetListofAgents(int? departmentId);
         List<SelectListItem> GetListofAgentsAdmin();
         List<SelectListItem> GetListofHod();
-        UserTokens GetUserSaltbyUserid(long userId);
+   
         CommonUserDetailsViewModel GetCommonUserDetailsbyUserName(string username);
         bool CheckIsAlreadyVerifiedRegistration(long userid);
         EditUserViewModel EditUserbyUserId(long? userId);

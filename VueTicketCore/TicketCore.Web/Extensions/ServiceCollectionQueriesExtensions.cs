@@ -28,7 +28,7 @@ namespace TicketCore.Web.Extensions
         {
             services.AddScoped<IRoleQueries, RoleQueries>();
             services.AddScoped<IUserMasterQueries, UserMasterQueries>();
-            services.AddScoped<IUserTokensQueries, UserTokensQueries>();
+       
             services.AddScoped<IMenuCategoryQueries, MenuCategoryQueries>();
             services.AddScoped<IMenuMasterQueries, MenuMasterQueries>();
             services.AddScoped<INoticeQueries, NoticeQueries>();

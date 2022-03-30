@@ -27,19 +27,19 @@ namespace TicketCore.Web.Areas.Administration.Controllers
         private readonly IProfileQueries _profileQueries;
         private readonly IProfileCommand _profileCommand;
         private readonly IUserMasterCommand _userMasterCommand;
-        private readonly IUserTokensQueries _userTokensQueries;
+      
         private readonly IUserMasterQueries _userMasterQueries;
         private readonly INotificationService _notificationService;
 
         public ProfileController(IProfileQueries profileQueries,
             IProfileCommand profileCommand,
             IUserMasterCommand userMasterCommand,
-            IUserTokensQueries userTokensQueries, IUserMasterQueries userMasterQueries, INotificationService notificationService)
+            IUserMasterQueries userMasterQueries, INotificationService notificationService)
         {
             _profileQueries = profileQueries;
             _profileCommand = profileCommand;
             _userMasterCommand = userMasterCommand;
-            _userTokensQueries = userTokensQueries;
+         
             _userMasterQueries = userMasterQueries;
             _notificationService = notificationService;
         }
