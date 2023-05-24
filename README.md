@@ -18,7 +18,7 @@ If you find project really helpful in Quick Learning do give it a star.
 <a href="https://rzp.io/l/mUVhgGuTB" target="_blank"> Purchase Database</a>
 
 ## Purchase of Database For International users
-<a href="https://www.buymeacoffee.com/f8lkgf5" target="_blank">Purchase Database</a>
+<a href="https://www.paypal.com/paypalme/saineshwar?locale.x=en_GB" target="_blank">Purchase Database</a>
 
 ## ⭐️ New Features⭐️
 
