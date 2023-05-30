@@ -11,9 +11,6 @@ The VueTicket is an Ticketing Application for small companies which are into cus
 ## Give a Star ⭐️
 If you find project really helpful in Quick Learning do give it a star. 
 
-## Support If Possible
-<a href="https://www.buymeacoffee.com/f8lkgf5" target="_blank"><img src="https://github.com/saineshwar/VueTicket/blob/main/images/buymecoffee.jpg" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
-
 ## Purchase of Database For India users
 <a href="https://rzp.io/l/mUVhgGuTB" target="_blank"> Purchase Database</a>
 
