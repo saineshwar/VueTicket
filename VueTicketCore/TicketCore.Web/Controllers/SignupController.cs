@@ -49,9 +49,7 @@ namespace TicketCore.Web.Controllers
         }
 
         [HttpPost]
-        [ValidateDNTCaptcha(ErrorMessage = "Please enter the Valid security code.",
-            CaptchaGeneratorLanguage = Language.English,
-            CaptchaGeneratorDisplayMode = DisplayMode.ShowDigits)]
+        [ValidateDNTCaptcha(ErrorMessage = "Please enter the Valid security code.")]
         public IActionResult Form(SignupFormViewModel signupFormViewModel)
         {
             if (ModelState.IsValid)

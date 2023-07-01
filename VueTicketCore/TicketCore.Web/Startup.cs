@@ -170,8 +170,8 @@ namespace TicketCore.Web
                     .ShowThousandsSeparators(false)
                     .WithEncryptionKey("9F3baE2KFTM7m0C^tt%^Ag")
                     .AbsoluteExpiration(minutes: 7)
-                    .WithNoise(pixelsDensity: 50, linesCount: 10)
-                    
+                    .WithNoise(0.015f, 0.015f, 1, 0.0f)
+
 
             );
 

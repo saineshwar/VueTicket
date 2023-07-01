@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Globalization;
 using System.Security.Cryptography;
@@ -28,13 +29,15 @@ namespace TicketCore.Web.Controllers
         private readonly ICheckInStatusQueries _checkInStatusQueries;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAuditCommand _auditCommand;
+        private readonly ILogger<PortalController> _logger;
+
         public PortalController(IUserMasterQueries userMasterQueries,
-           
+
             INoticeQueries noticeQueries,
-            IVerificationCommand verificationCommand, 
+            IVerificationCommand verificationCommand,
             INotificationService notificationService,
             ICheckInStatusQueries checkInStatusQueries,
-            IHttpContextAccessor httpContextAccessor, IAuditCommand auditCommand)
+            IHttpContextAccessor httpContextAccessor, IAuditCommand auditCommand, ILogger<PortalController> logger)
         {
             _userMasterQueries = userMasterQueries;
             _noticeQueries = noticeQueries;
@@ -42,6 +45,7 @@ namespace TicketCore.Web.Controllers
             _checkInStatusQueries = checkInStatusQueries;
             _httpContextAccessor = httpContextAccessor;
             _auditCommand = auditCommand;
+            _logger = logger;
         }
         public IActionResult Login()
         {
@@ -73,9 +77,7 @@ namespace TicketCore.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ValidateDNTCaptcha(ErrorMessage = "Please enter the Valid security code.",
-            CaptchaGeneratorLanguage = Language.English,
-            CaptchaGeneratorDisplayMode = DisplayMode.ShowDigits)]
+        [ValidateDNTCaptcha(ErrorMessage = "Please enter the Valid security code.")]
         public IActionResult Login(LoginViewModel loginViewModel)
         {
             if (ModelState.IsValid)

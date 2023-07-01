@@ -47,7 +47,7 @@ namespace TicketCore.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ValidateDNTCaptcha(ErrorMessage = "Please enter valid security code", CaptchaGeneratorLanguage = Language.English, CaptchaGeneratorDisplayMode = DisplayMode.ShowDigits)]
+        [ValidateDNTCaptcha(ErrorMessage = "Please enter valid security code")]
         public IActionResult Recover(ForgotPasswordViewModel forgotPasswordViewModel)
         {
             if (!_userMasterQueries.CheckEmailIdExists(forgotPasswordViewModel.EmailId))
