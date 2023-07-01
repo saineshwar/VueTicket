@@ -1,15 +1,15 @@
 # What is VueTicket?
-The VueTicket is an Ticketing Application for small companies which are into customer support.
+The VueTicket is a Ticketing Application for small companies in customer support.
 
 <img src="https://github.com/saineshwar/VueTicket/blob/main/images/My project.png" alt="Banner" title="Banner" style="max-width:100%;">
 
 ## Technologies Used
-•	ASP.NET Core 5.0
+•	ASP.NET Core 7.0
 
-•	Entity Framework Core 5.0.9
+•	Entity Framework Core 7.0.8
 
 ## Give a Star ⭐️
-If you find project really helpful in Quick Learning do give it a star. 
+If you find the project helpful in Quick Learning, give it a star. 
 
 ## Purchase of Database For India users
 <a href="https://rzp.io/l/mUVhgGuTB" target="_blank"> Purchase Database</a>
@@ -38,13 +38,13 @@ If you find project really helpful in Quick Learning do give it a star.
 * Ticket History
 * Knowledgebase
 * Delete & Restore Ticket
-* Replying on Ticket 
+* Replying to Ticket 
 * Reports
 * Escalation
 * Notification
 * Masters
 * View All Roles
-* Managing Menu Category,Menu,SubMenu 
+* Managing Menu Category, Menu, and SubMenu 
 * Adding and Managing Users (Users, Agent, Agentadmin, Hod, Admin)
 * Setting up SMTP
 * General settings 
@@ -54,12 +54,12 @@ If you find project really helpful in Quick Learning do give it a star.
 * Configuring SLA policies 
 * Setting Default Ticket Count for Agents and Auto Closing Ticket Hours
 * Managing Cache
-* Auto process of ticket Allocation , Notification ,Overdue,Escalation,Closing
+* Auto process of ticket Allocation, Notification, Overdue, Escalation, and Closing
 
 ### About Platform Used
 •	Entire Application using Microsoft visual studio 2019 with SQL Server 2019. 
 
-•	Framwork used is .Net 5.0 and language is C# and Dapper, Entity Framework Core as ORM and Repository Pattern.
+•	Framework used is .Net 7.0 and the language is C# and Dapper, Entity Framework Core as ORM and Repository Pattern.
 
 ### Link to download VisualStudio
 https://www.visualstudio.com/vs/older-downloads/
@@ -105,11 +105,11 @@ https://www.microsoft.com/en-us/sql-server/sql-server-downloads
 
 ### How To Run this Project.
 1. First of all Clone repository to your local machine.
-2. Create SQL database with name VueTicketDatabase
-3. Run SQL Database script which you have Received on request.
+2. Create an SQL database with the name VueTicketDatabase
+3. Run the SQL Database script which you have received on request.
 4. Configure Connection String in appsettings.json ("DatabaseConnection")    
-5. Run Application 
-6. Configure SQL jobs for assiging Tickets which are shared with database.
+5. Run the Application 
+6. Configure SQL jobs for assigning Tickets which are shared with the database.
 
 
 ## About the Author
@@ -124,7 +124,7 @@ https://www.microsoft.com/en-us/sql-server/sql-server-downloads
 Released under the [MIT LICENSE](https://github.com/saineshwar/VueTicket/blob/main/LICENSE)
 
 ## Database.
-For Database Please send request.
+For the Database Please send the request.
 sendticket365[at]gmail[dot]com
 
 
