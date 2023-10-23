@@ -11,11 +11,8 @@ The VueTicket is a Ticketing Application for small companies in customer support
 ## Give a Star ⭐️
 If you find the project helpful in Quick Learning, give it a star. 
 
-## Purchase of Database For India users
-<a href="https://rzp.io/l/mUVhgGuTB" target="_blank"> Purchase Database</a>
-
-## Purchase of Database For International users
-<a href="https://www.paypal.com/paypalme/saineshwar?locale.x=en_GB" target="_blank">Purchase Database</a>
+## How to Purchase Database 
+<a href="https://tutexchange.com/how-to-purchase-vueticket-software-database/" target="_blank">Purchase</a>
 
 ## ⭐️ New Features⭐️
 
@@ -57,7 +54,7 @@ If you find the project helpful in Quick Learning, give it a star.
 * Auto process of ticket Allocation, Notification, Overdue, Escalation, and Closing
 
 ### About Platform Used
-•	Entire Application using Microsoft visual studio 2019 with SQL Server 2019. 
+•	Entire Application using Microsoft Visual Studio 2019 with SQL Server 2019. 
 
 •	Framework used is .Net 7.0 and the language is C# and Dapper, Entity Framework Core as ORM and Repository Pattern.
 
